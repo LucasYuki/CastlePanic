@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from PIL import ImageTk, Image
 from abc import ABC, abstractmethod
 
+from .enums import CartaTipo
 from Jogo import Carta
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Jogador
@@ -11,8 +12,8 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Monstro
 
 class Acao(Carta, ABC):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self, imagem: Image, tipo: CartaTipo):
+        super().__init__(imagem, tipo)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
         pass
@@ -23,8 +24,9 @@ class Acao(Carta, ABC):
         pass
 
 class Reciclar(Acao):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self):
+        imagem = None # Colocar imagem de cada tipo de carta
+        super().__init__(imagem, CartaTipo.RECICLAR)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
         pass
@@ -35,8 +37,9 @@ class Reciclar(Acao):
         return super().agir(jogador, pos, monstro)
 
 class Fortificar(Acao):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self):
+        imagem = None # Colocar imagem de cada tipo de carta
+        super().__init__(imagem, CartaTipo.FORTIFICAR)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
         pass
@@ -47,8 +50,13 @@ class Fortificar(Acao):
         return super().agir(jogador, pos, monstro)
 
 class ReparoMuro(Acao):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self, tipo: str):
+        if tipo == CartaTipo.MORTAR:
+            imagem = None # Colocar imagem de cada tipo de carta
+            super().__init__(imagem, tipo)
+        if tipo == CartaTipo.TIJOLO:
+            imagem = None # Colocar imagem de cada tipo de carta
+            super().__init__(imagem, tipo)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
         pass

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from enum import IntEnum, unique, auto
 
-class IterEnum(IntEnum):
-    @staticmethod
-    def list(reverse=False, key=None):
-        member_list = list(AnelTipo)
-        member_list.sort(reverse=reverse, key=key)
+class IterEnum(IntEnum):    
+    @classmethod
+    def list(cls, reverse=False):
+        member_list = list(cls)
+        member_list.sort(reverse=reverse)
         return member_list
 
 @unique
@@ -18,6 +18,7 @@ class AnelTipo(IterEnum):
 
 @unique
 class FatiaCor(IterEnum):
+    TODAS = -1,
     VERMELHO = 0,
     VERDE = 1,
     AZUL = 2
@@ -32,6 +33,13 @@ class FatiaCor(IterEnum):
             return FatiaCor.AZUL
         else:
             raise ValueError("num(%s) deve ser um inteiro entre 1 e 6" %str(num))
+
+    @classmethod
+    def list(cls, reverse=False, incluir_todas=False):
+        member_list = super().list(reverse=False)
+        if not incluir_todas:
+            member_list.remove(cls.TODAS)
+        return member_list
 
 @unique
 class ContrucaoTipo(IntEnum):

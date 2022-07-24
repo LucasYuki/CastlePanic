@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 from PIL import ImageTk, Image
 from abc import ABC, abstractmethod
 
+from .enums import CartaTipo
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Jogador
 
 class Carta(ABC):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        self.__idx: str = idx
+    def __init__(self, imagem: Image, tipo: CartaTipo):
         self.__imagem: Image = imagem
-        self.__tipo: str = tipo
+        self.__tipo: CartaTipo = tipo
     
     @property
     def idx(self):
@@ -25,8 +25,8 @@ class Carta(ABC):
     def tipo(self):
         return self.__tipo
     
-    @property
-    def ratio(self):
+    @staticmethod
+    def ratio():
         return 315/500
 
     @abstractmethod
@@ -34,22 +34,22 @@ class Carta(ABC):
         pass
 
 class Perdido(Carta):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self):
+        super().__init__(imagem, CartaTipo.PERDIDO)
 
     def ativar(self, jogador: Jogador) -> None:
         pass
 
 class Comprar(Carta):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self):
+        super().__init__(imagem, CartaTipo.COMPRAR)
 
     def ativar(self, jogador: Jogador) -> None:
         pass
 
 class BoaMira(Carta):
-    def __init__(self, idx: str, imagem: Image, tipo: str):
-        super().__init__(idx, imagem, tipo)
+    def __init__(self):
+        super().__init__(imagem, CartaTipo.BOAMIRA)
 
     def ativar(self, jogador: Jogador) -> None:
         pass

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from PIL import ImageTk, Image, ImageDraw
 import numpy as np
 
-from .enums import TokenTipo, CartaTipo
+from .enums import TokenTipo, CartaTipo, AnelTipo
 from .tabuleiro import Tabuleiro
 from .jogador import Jogador
 from .carta import Comprar
@@ -25,11 +25,12 @@ class Mesa():
         self.__subestado: str = False
         
         self.__tabuleiro = Tabuleiro()
-        self.__descarte_tokens: list[Token.Token] = None
-        self.__pilha_cartas: list[Carta.Carta] = None
-        self.__pilha_descarte: list[Carta.Carta] = None
+        self.__descarte_tokens: list[Token.Token] = []
+        self.__pilha_cartas: list[Carta.Carta] = []
+        self.__pilha_descarte: list[Carta.Carta] = []
         self.__saco_tokens: list[Token] = []
         
+        # Inicializa Tokens
         monstros_iniciais: list[Monstro] = []
         
         # 6 Goblins
@@ -68,11 +69,11 @@ class Mesa():
         for fatia, monstro_inicial in enumerate(monstros_iniciais):
             self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.CASTELO, fatia)
 
-        
-
-        # IMAGEM E DOG
+        # Inicializa Jogadores
         self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info) for info in jogadores}
         
+        # Inicializa Cartas
+        """
         # Inicialização das imagens das cartas
         orig_img = Image.open("Images/base/49Cartas.jpg")
         
@@ -86,8 +87,9 @@ class Mesa():
             for x in range(6):
                 carta_img = orig_img.crop((327*x+5, 510*y+5, 327*(x+1)-7, 510*(y+1)-5))
                 carta_img.putalpha(card_mask) 
-                self.__jogadores[idx].colocar_na_mao(Comprar("idx", carta_img, "tipo"))
+                self.__jogadores[idx].colocar_na_mao(Comprar())
             y += 1
+        """
     
     @property
     def jogadores(self):

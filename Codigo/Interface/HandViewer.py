@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 from .ImageHelper import ImageHelper
+from Jogo import Carta
 
 class HandViewer(Canvas):
     __slots__ = "__layout", "__player_hand", "__imgs", "__cards_idx", \
@@ -43,7 +44,7 @@ class HandViewer(Canvas):
         if n_cards==0:
             return
         card_height = self.__current_height
-        card_width = card_height*self.__player_hand[0].ratio
+        card_width = card_height*Carta.ratio()
         space = self.__current_width-card_width
         
         card_size = (int(card_width), card_height)
