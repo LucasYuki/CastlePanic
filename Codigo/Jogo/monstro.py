@@ -49,6 +49,9 @@ class Monstro(Token):
             return Image.open("Images/base/TM_orc.png")
         elif self.get_tipo() == TokenTipo.TROLL:
             return Image.open("Images/base/TM_troll.png")
+    
+    def vida_perdida(self):
+        return self._vida_max - self.__vida
 
 class Especial(Monstro, ABC):
     def __init__(self, vida_max: int, tipo: TokenTipo) -> None:

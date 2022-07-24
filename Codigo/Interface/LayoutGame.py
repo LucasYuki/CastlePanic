@@ -116,3 +116,8 @@ class LayoutGame(ttk.Frame):
     @property
     def padding(self):
         return self.__padding
+    
+    def update(self):
+        self.__board.update()
+        for hand in self.__hands:
+            hand.update()

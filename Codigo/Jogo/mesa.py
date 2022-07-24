@@ -76,7 +76,7 @@ class Mesa():
         np.random.permutation(self.__saco_tokens)
         np.random.permutation(monstros_iniciais)
         for fatia, monstro_inicial in enumerate(monstros_iniciais):
-            self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.CASTELO, fatia)
+            self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.FLORESTA, fatia)
         
         # Inicializa Cartas
         # 3 Red Archer

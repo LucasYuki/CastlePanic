@@ -14,8 +14,8 @@ class HandViewer(Canvas):
         self.__layout = layout
         Canvas.__init__(self, self.__layout, borderwidth=borderwidth, 
                         highlightthickness=highlightthickness, **kwargs)
-        self.__current_width = 1
-        self.__current_height = 1
+        self.__current_width = 100
+        self.__current_height = 100
         
         self.update()
         self.bind("<Configure>", self.__on_resize)
@@ -23,16 +23,15 @@ class HandViewer(Canvas):
     def update(self):
         self.__player_hand = self.__jogador.get_mao()
 
-        self.__cards_idx = []
-        self.__imgs = []
-        for i in range(len(self.__player_hand)):
-            self.__imgs.append(ImageTk.PhotoImage(self.__player_hand[i].imagem))
-            self.__cards_idx.append(self.create_image(0, 0, image=self.__imgs[i], 
-                                                anchor='nw'))
-            self.tag_bind(self.__cards_idx[i], "<Enter>",
-                          lambda e, idx=i: self.__on_hover(e, idx))
-            self.tag_bind(self.__cards_idx[i], "<Button-1>",
-                          lambda e, idx=i: self.__on_click(e, idx))
+        self.__cards_idx = {}
+        self.__imgs = {}
+        for carta in self.__player_hand:
+            self.__imgs[carta] = ImageTk.PhotoImage(carta.imagem)
+            idx = self.create_image(0, 0, image=self.__imgs[carta], anchor='nw')
+            self.__cards_idx[carta] = idx
+            self.tag_bind(idx, "<Enter>", lambda e, c=carta: self.__on_hover(e, c))
+            self.tag_bind(idx, "<Button-1>", lambda e, c=carta: self.__on_click(e, c))
+        self.__resize()
     
     def __on_resize(self, event):
         self.__current_width = event.width-self.__layout.padding*2
@@ -48,14 +47,14 @@ class HandViewer(Canvas):
         space = self.__current_width-card_width
         
         card_size = (int(card_width), card_height)
-        for i in range(n_cards):
-            self.__imgs[i] = ImageHelper.get_tk_image(self.__player_hand[i].imagem, *card_size)
-            self.itemconfig(self.__cards_idx[i], image=self.__imgs[i]) 
-            self.coords(self.__cards_idx[i], (self.__layout.padding+(i*space)//(n_cards-1),
+        for i, carta in enumerate(self.__player_hand):
+            self.__imgs[carta] = ImageHelper.get_tk_image(carta.imagem, *card_size)
+            self.itemconfig(self.__cards_idx[carta], image=self.__imgs[carta]) 
+            self.coords(self.__cards_idx[carta], (self.__layout.padding+(i*space)//(n_cards-1),
                                           self.__layout.padding))
     
-    def __on_hover(self, event, idx: int):
-        self.__layout.zoom(self.__player_hand[idx].imagem)
+    def __on_hover(self, event, carta: Carta):
+        self.__layout.zoom(carta.imagem)
 
-    def __on_click(self, event, idx: int):
-        self.__layout.set_info("Click on card %i" %(idx))
+    def __on_click(self, event, carta: Carta):
+        self.__layout.set_info("Click on card %i" %(self.__cards_idx[carta]))

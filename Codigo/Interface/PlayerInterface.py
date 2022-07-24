@@ -57,3 +57,4 @@ class PlayerInterface(Tk):
         print("Trocando Frame")
         self.__set_frame("game")
         print("Frame Trocado")
+        self.__frames["game"].update()
