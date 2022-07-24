@@ -12,7 +12,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
 
 class Token(Peca):
     def __init__(self, tipo: TokenTipo) -> None:
-        self._tipo = tipo
+        self.__tipo = tipo
         super().__init__()
         
     def load_image(self): # -> Image

@@ -19,7 +19,7 @@ class Acao(Carta, ABC):
         jogador.set_acao_pendente(self)
 
     @abstractmethod
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, 
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, 
             monstro: Monstro.Monstro = None) -> None:
         pass
 
@@ -28,16 +28,16 @@ class Reciclar(Acao):
         imagem = Image.open("Images/base/C_scavenge.png")
         super().__init__(imagem, CartaTipo.RECICLAR)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        pass
-        return super().agir(jogador, pos, monstro)
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+        jogador.colocar_na_mao(carta)
+        jogador.remove_acao_pendente()
 
 class Fortificar(Acao):
     def __init__(self):
         imagem = Image.open("Images/base/C_fortify.png")
         super().__init__(imagem, CartaTipo.FORTIFICAR)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass
         return super().agir(jogador, pos, monstro)
 
@@ -50,10 +50,15 @@ class ReparoMuro(Acao):
             imagem = Image.open("Images/base/C_brick.png")
             super().__init__(imagem, tipo)
 
-    def ativar(self, jogador: Jogador.Jogador) -> None:
-        jogador.set_acao_pendente(self)
-        return super().ativar(jogador)
+    def ativar(self, jogador: Jogador) -> None:
+        efeitos = map(lambda carta: carta.tipo ,jogador.get_cartas_efeitos_pendentes())
+        if self.__tipo == CartaTipo.MORTAR and CartaTipo.TIJOLO in efeitos:
+            jogador.set_acao_pendente(self)
+        elif self.__tipo == CartaTipo.TIJOLO and CartaTipo.MORTAR in efeitos:
+            jogador.set_acao_pendente(self)
+        else:
+            jogador.add_carta_efeito_pendente(self)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass
         return super().agir(jogador, pos, monstro)

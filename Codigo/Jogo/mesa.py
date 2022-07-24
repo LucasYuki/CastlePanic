@@ -11,7 +11,7 @@ from .jogador import Jogador
 # cartas 
 from .ataque import Dano, Empurrao, Pixe, Barbaro
 from .carta import Perdido, Comprar, BoaMira
-from .acao import Reciclar, Fortificar, ReparoMuro
+from .acao import Acao, Reciclar, Fortificar, ReparoMuro
 
 # tokens
 from .monstro import Monstro, Rei, Mago, Medico
@@ -23,6 +23,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Posicao
     from Jogo import Peca
     from Jogo import Carta
+    from Jogo import Ataque
 
 class Mesa():
     def __init__(self, jogadores, seed: int):    
@@ -186,10 +187,20 @@ class Mesa():
         pass
 
     def selecionar_carta_descarte(self, carta: Carta, jogador: Jogador) -> bool:
-        pass
+        acao: Acao = jogador.get_acao_pendente()
+        if acao.tipo == CartaTipo.RECICLAR:
+            acao.agir(acao, jogador, None, None)
+            return True
+        return False
 
     def selecionar_monstro(self, monstro: Monstro, pos: Posicao, jogador: Jogador) -> bool:
-        pass
+        acao: Acao = jogador.get_acao_pendente()
+        if isinstance(acao, Ataque):
+            alcanca: bool = acao.verificar_alcance(pos)
+            if alcanca:
+                acao.agir(None, jogador, pos, monstro)
+                return True
+        return False
 
     def selecionar_posicao(self, pos: Posicao.Posicao, jogador: Jogador) -> bool:
         pass

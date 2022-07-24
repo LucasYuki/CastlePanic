@@ -18,17 +18,17 @@ class Ataque(Acao, ABC):
     def __init__(self, imagem: Image, tipo: CartaTipo, aneis: set, cores: FatiaCor):
         super().__init__(imagem, tipo)
         self.__anel: set[AnelTipo] = aneis
-        self.__cor: FatiaCor = cores
+        self.__cor: set[FatiaCor] = cores
 
     @abstractmethod
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass
 
-    def aplicar_ataque(monstro: Monstro) -> None:
+    def aplicar_ataque(self, monstro: Monstro) -> None:
         pass
 
     def verificar_alcance(self, pos: Posicao) -> bool:
-        pass
+        return pos.anel in self.__anel and pos.fatia in self.__cor
 
 class Dano(Ataque):
     def __init__(self, tipo: CartaTipo, cor: FatiaCor):
@@ -87,7 +87,7 @@ class Dano(Ataque):
         else:
             raise ValueError("Tipo da carta dano deve ser arqueiro, cavaleiro, espadachim ou heroi. Tipo recebido é %s" %str(carta_tipo))
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         efeitos_pendentes: set = jogador.get_cartas_efeitos_pendentes()
         boa_mira = list(filter(type(BoaMira), efeitos_pendentes))
         if boa_mira != []:
@@ -108,7 +108,7 @@ class Empurrao(Ataque):
                   AnelTipo.CASTELO}
         super().__init__(imagem, CartaTipo.EMPURRAO, fatias, FatiaCor.TODAS)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pos.remover_monstro(monstro)
         jogador.mesa.colocar_peca(monstro, AnelTipo.FLORESTA , pos.fatia)
         jogador.remove_acao_pendente()
@@ -122,7 +122,7 @@ class Pixe(Ataque):
                   AnelTipo.CASTELO}
         super().__init__(imagem, CartaTipo.PIXE, fatias, FatiaCor.TODAS)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         monstro.imobilizar(jogador.mesa.get_turn())
         jogador.remove_acao_pendente()
 
@@ -135,6 +135,6 @@ class Barbaro(Ataque):
                   AnelTipo.CASTELO}
         super().__init__(imagem, CartaTipo.BARBARO, fatias, FatiaCor.TODAS)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
+    def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pos.remover_monstro(monstro)
         jogador.remove_acao_pendente()
