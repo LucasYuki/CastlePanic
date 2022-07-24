@@ -4,12 +4,19 @@ from typing import TYPE_CHECKING
 from PIL import ImageTk, Image, ImageDraw
 import numpy as np
 
-from .enums import TokenTipo, CartaTipo, AnelTipo
+from .enums import TokenTipo, CartaTipo, AnelTipo, FatiaCor
 from .tabuleiro import Tabuleiro
 from .jogador import Jogador
-from .carta import Comprar
+
+# cartas 
+from .ataque import Dano, Empurrao, Pixe, Barbaro
+from .carta import Perdido, Comprar, BoaMira
+from .acao import Reciclar, Fortificar, ReparoMuro
+
+# tokens
 from .monstro import Monstro, Rei, Mago, Medico
 from .token import ComprarTokens, Descarta, Pedra, Praga
+
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Token
     from Jogo import Monstro
@@ -70,6 +77,63 @@ class Mesa():
             self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.CASTELO, fatia)
         
         # Inicializa Cartas
+        # 3 Red Archer
+        self.__pilha_cartas += [Dano(CartaTipo.ARQUEIRO, FatiaCor.VERMELHO) for i in range(3)]
+        # 3 Red Knight
+        self.__pilha_cartas += [Dano(CartaTipo.CAVALEIRO, FatiaCor.VERMELHO) for i in range(3)]
+        # 3 Red Swordsman
+        self.__pilha_cartas += [Dano(CartaTipo.ESPADACHIM, FatiaCor.VERMELHO) for i in range(3)]
+        # 3 Blue Archer
+        self.__pilha_cartas += [Dano(CartaTipo.ARQUEIRO, FatiaCor.AZUL) for i in range(3)]
+        # 3 Blue Knight
+        self.__pilha_cartas += [Dano(CartaTipo.CAVALEIRO, FatiaCor.AZUL) for i in range(3)]
+        # 3 Blue Swordsman
+        self.__pilha_cartas += [Dano(CartaTipo.ESPADACHIM, FatiaCor.AZUL) for i in range(3)]
+        # 3 Green Archer
+        self.__pilha_cartas += [Dano(CartaTipo.ARQUEIRO, FatiaCor.VERDE) for i in range(3)]
+        # 3 Green Knight
+        self.__pilha_cartas += [Dano(CartaTipo.CAVALEIRO, FatiaCor.VERDE) for i in range(3)]
+        # 3 Green Swordsman
+        self.__pilha_cartas += [Dano(CartaTipo.ESPADACHIM, FatiaCor.VERDE) for i in range(3)]
+        # 1 Any color Archer
+        self.__pilha_cartas.append(Dano(CartaTipo.ARQUEIRO, FatiaCor.TODAS))
+        # 1 Any color Knight
+        self.__pilha_cartas.append(Dano(CartaTipo.CAVALEIRO, FatiaCor.TODAS))
+        # 1 Any color Swordsman
+        self.__pilha_cartas.append(Dano(CartaTipo.ESPADACHIM, FatiaCor.TODAS))
+        # 1 Red Hero
+        self.__pilha_cartas.append(Dano(CartaTipo.HEROI, FatiaCor.VERMELHO))
+        # 1 Blue Hero
+        self.__pilha_cartas.append(Dano(CartaTipo.HEROI, FatiaCor.AZUL))
+        # 1 Green Hero
+        self.__pilha_cartas.append(Dano(CartaTipo.HEROI, FatiaCor.VERDE))
+        # 1 Barbarian
+        self.__pilha_cartas.append(Barbaro())
+        # 1 Drive Him Back!
+        self.__pilha_cartas.append(Empurrao())
+        # 1 Tar
+        self.__pilha_cartas.append(Pixe())
+        # 1 Draw 2 Cards
+        self.__pilha_cartas.append(Comprar())
+        # 1 Missing
+        self.__pilha_cartas.append(Perdido())
+        # 1 Nice Shot
+        self.__pilha_cartas.append(BoaMira())
+        # 1 Fortify Wall
+        self.__pilha_cartas.append(Fortificar())
+        # 1 Scavenge
+        self.__pilha_cartas.append(Reciclar())
+        # 1 Brick
+        self.__pilha_cartas.append(ReparoMuro(CartaTipo.TIJOLO))
+        # 1 Mortar
+        self.__pilha_cartas.append(ReparoMuro(CartaTipo.MORTAR))
+        
+        # Inicializa Jogadores
+        self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info, mesa=self) for info in jogadores}
+        
+        while len(self.__pilha_cartas) is not 0:
+            self.__jogadores[jogadores[0][1]].comprar_carta()
+            
         """
         # Inicialização das imagens das cartas
         orig_img = Image.open("Images/base/49Cartas.jpg")
@@ -88,9 +152,6 @@ class Mesa():
             y += 1
         """
     
-        # Inicializa Jogadores
-        self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info) for info in jogadores}
-    
     @property
     def jogadores(self):
         return self.__jogadores
@@ -100,7 +161,7 @@ class Mesa():
         return self.__turno
 
     def get_carta_compra(self) -> Carta:
-        pass
+        return self.__pilha_cartas.pop()
 
     def put_descarte(self, carta: Carta) -> None:
         pass

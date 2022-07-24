@@ -25,7 +25,7 @@ class Acao(Carta, ABC):
 
 class Reciclar(Acao):
     def __init__(self):
-        imagem = None # Colocar imagem de cada tipo de carta
+        imagem = Image.open("Images/base/C_scavenge.png")
         super().__init__(imagem, CartaTipo.RECICLAR)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
@@ -38,7 +38,7 @@ class Reciclar(Acao):
 
 class Fortificar(Acao):
     def __init__(self):
-        imagem = None # Colocar imagem de cada tipo de carta
+        imagem = Image.open("Images/base/C_fortify.png")
         super().__init__(imagem, CartaTipo.FORTIFICAR)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
@@ -50,12 +50,12 @@ class Fortificar(Acao):
         return super().agir(jogador, pos, monstro)
 
 class ReparoMuro(Acao):
-    def __init__(self, tipo: str):
+    def __init__(self, tipo: CartaTipo):
         if tipo == CartaTipo.MORTAR:
-            imagem = None # Colocar imagem de cada tipo de carta
+            imagem = Image.open("Images/base/C_mortar.png")
             super().__init__(imagem, tipo)
         if tipo == CartaTipo.TIJOLO:
-            imagem = None # Colocar imagem de cada tipo de carta
+            imagem = Image.open("Images/base/C_brick.png")
             super().__init__(imagem, tipo)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:

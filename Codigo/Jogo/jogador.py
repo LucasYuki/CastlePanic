@@ -8,7 +8,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Mesa
 
 class Jogador():
-    def __init__(self, nome: str, idx: str, ordem: str):
+    def __init__(self, nome: str, idx: str, ordem: str, mesa: Mesa):
         self.__mao: list[Carta] = []
         
         # Nao ta no diagrama de classes
@@ -18,7 +18,7 @@ class Jogador():
         # Fim
 
         self.__pontos: int  = None
-        self.__mesa: Mesa = None
+        self.__mesa: Mesa = mesa
         self.__acao_pendente: Carta = None #Mudar Carta para Acao
         self.__carta_efeito_pendente: set[Carta] = set()
         
@@ -27,7 +27,7 @@ class Jogador():
         self.__mao.append(carta)
 
     def comprar_carta(self) -> None:
-        carta = Mesa.mesa.get_carta_compra()
+        carta = self.__mesa.get_carta_compra()
         if carta:
             self.colocar_na_mao(carta)
 

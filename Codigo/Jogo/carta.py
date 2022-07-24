@@ -35,6 +35,7 @@ class Carta(ABC):
 
 class Perdido(Carta):
     def __init__(self):
+        imagem = Image.open("Images/base/C_missing.png")
         super().__init__(imagem, CartaTipo.PERDIDO)
 
     def ativar(self, jogador: Jogador) -> None:
@@ -42,6 +43,7 @@ class Perdido(Carta):
 
 class Comprar(Carta):
     def __init__(self):
+        imagem = Image.open("Images/base/C_draw.png")
         super().__init__(imagem, CartaTipo.COMPRAR)
 
     def ativar(self, jogador: Jogador) -> None:
@@ -49,6 +51,7 @@ class Comprar(Carta):
 
 class BoaMira(Carta):
     def __init__(self):
+        imagem = Image.open("Images/base/C_nice_shot.png")
         super().__init__(imagem, CartaTipo.BOAMIRA)
 
     def ativar(self, jogador: Jogador) -> None:
