@@ -3,10 +3,11 @@ from tkinter import ttk
 from PIL import ImageTk, Image, ImageDraw
 import Interface
 from Distribuido import CastlePanicDistribuido
+from Jogo import FaseTipo
 
 class LayoutGame(ttk.Frame):
     __slots__ = ("__board", "__info", "__hands", "__hand_notebook", "__buttons",
-        "__cancel_btn", "__play_btn", "__next_btn", "__padding", "__buttons_height")
+        "__cancel_btn", "__play_btn", "__passar_btn", "__padding", "__buttons_height")
 
     def __init__(self, interface, jogo: CastlePanicDistribuido, **kwargs):
         self.__jogo = jogo
@@ -34,17 +35,17 @@ class LayoutGame(ttk.Frame):
         self.__buttons = ttk.Frame(self)
         self.__buttons.rowconfigure(0, weight=1)
         
-        self.__cancel_btn = ttk.Button(self.__buttons, text="Cancel", command=self.cancel)
-        self.__cancel_btn.grid(column=0, row=0, sticky=(N, W, E, S))
+        self.__descartar_btn = ttk.Button(self.__buttons, text="Descartar", command=self.descartar)
+        self.__descartar_btn.grid(column=0, row=0, sticky=(N, W, E, S))
         self.__buttons.columnconfigure(0, weight=1)
-
-        self.__play_btn = ttk.Button(self.__buttons, text="Play", command=self.play)
-        self.__play_btn.grid(column=1, row=0, sticky=(N, W, E, S))
-        self.__buttons.columnconfigure(1, weight=1)
         
-        self.__next_btn = ttk.Button(self.__buttons, text="Pass", command=self.next_phase)
-        self.__next_btn.grid(column=2, row=0, sticky=(N, W, E, S))
+        self.__jogar_btn = ttk.Button(self.__buttons, text="Jogar", command=self.jogar)
+        self.__jogar_btn.grid(column=2, row=0, sticky=(N, W, E, S))
         self.__buttons.columnconfigure(2, weight=1)
+        
+        self.__passar_btn = ttk.Button(self.__buttons, text="Passar", command=self.passar)
+        self.__passar_btn.grid(column=3, row=0, sticky=(N, W, E, S))
+        self.__buttons.columnconfigure(3, weight=1)
 
     def __on_resize(self, event):
         #   Calcula a posição de cada uma das partes do layout quando o tamanho 
@@ -91,22 +92,29 @@ class LayoutGame(ttk.Frame):
             width=remaining_width,
             height=self.__buttons_height)
 
-    def cancel(self):
-        self.__jogo.send_move("Cancel")
-        self.set_info("Cancel")
+    def descartar(self):
+        #self.__jogo.send_move("Descartar")
+        self.set_info("Descartar")
 
-    def play(self):
-        self.__jogo.send_move("Play")
-        self.set_info("Play")
+    def jogar(self):
+        #self.__jogo.send_move("Jogar")
+        self.set_info("Jogar")
 
-    def next_phase(self):
-        self.__jogo.send_move("next_phase")
-        self.set_info("Next Turn")
-        self.__hand_notebook.hide(self.__hands[self.__current_player])
-        self.__current_player = (self.__current_player+1) % len(self.__hands)
-        self.__hand_notebook.add(self.__hands[self.__current_player])
-        self.__hand_notebook.select(self.__hands[self.__current_player])
+    def passar(self):
+        #self.__jogo.send_move("Passar")
+        self.set_info("Passar")
+        #self.__hand_notebook.hide(self.__hands[self.__current_player])
+        #self.__current_player = (self.__current_player+1) % len(self.__hands)
+        #self.__hand_notebook.add(self.__hands[self.__current_player])
+        #self.__hand_notebook.select(self.__hands[self.__current_player])
 
+    def hide_button(self, button):
+        button._grid_info = button.grid_info()
+        button.grid_remove()
+        
+    def show_button(self, button):
+        button.grid(button._grid_info)
+        
     def zoom(self, img: Image):
         self.__info.zoom(img)
 
@@ -118,6 +126,28 @@ class LayoutGame(ttk.Frame):
         return self.__padding
     
     def update(self):
+        fase = jogo.get_fase()
+        if fase == FaseTipo.INICIO:
+            self.show_button(self.__descartar_btn)
+            self.show_button(self.__jogar_btn)
+            self.show_button(self.__passar_btn)
+        elif fase == FaseTipo.DESCARTE:
+            self.hide_button(self.__descartar_btn)
+            self.show_button(self.__jogar_btn)
+            self.show_button(self.__passar_btn)
+        elif fase == FaseTipo.TROCA:
+            self.hide_button(self.__descartar_btn)
+            self.show_button(self.__jogar_btn)
+            self.show_button(self.__passar_btn)
+        elif fase == FaseTipo.JOGADA:
+            self.hide_button(self.__descartar_btn)
+            self.hide_button(self.__jogar_btn)
+            self.show_button(self.__passar_btn)
+        elif fase == FaseTipo.VITORIA:
+            pass
+        elif fase == FaseTipo.DERROTA:
+            pass
+        
         self.__board.update()
         for hand in self.__hands:
             hand.update()

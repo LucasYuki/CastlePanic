@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .enums import AnelTipo, FatiaCor, ContrucaoTipo
+from .enums import AnelTipo, FatiaCor, ContrucaoTipo, FaseTipo
 
 from .posicao import Posicao
 from .fatia import Fatia

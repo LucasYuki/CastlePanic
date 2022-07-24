@@ -1,5 +1,5 @@
 from DOG import DogPlayerInterface, DogActor, StartStatus
-from Jogo import Mesa
+from Jogo import Mesa, FaseTipo
 import time 
 
 class CastlePanicDistribuido(DogPlayerInterface):
@@ -80,3 +80,6 @@ class CastlePanicDistribuido(DogPlayerInterface):
     
     def get_tabuleiro(self):
         return self.__jogo.get_tabuleiro()
+    
+    def get_Fase(self) -> FaseTipo:
+        return self.__jogo.fase
