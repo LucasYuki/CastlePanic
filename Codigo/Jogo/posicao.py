@@ -56,10 +56,6 @@ class Posicao:
     def get_anel_fatia(self) -> tuple:
         return (self.__anel, self.__fatia)
 
-    # NAO USADO
-    def novo_monstro(self, monstro: Monstro) -> None:
-        self.__pecas.append(monstro)
-
     def remover_todos_monstros(self) -> None:
         for peca in self.__pecas:
             if isinstance(peca, Monstro):
