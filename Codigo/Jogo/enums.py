@@ -9,6 +9,16 @@ class IterEnum(IntEnum):
         return member_list
 
 @unique
+class FaseTipo(IterEnum):
+    PASSAGEM = 0,
+    INICIO = 1,
+    DESCARTE = 2,
+    TROCA = 3,
+    JOGADA = 4,
+    VITORIA = 5,
+    DERROTA = 6
+
+@unique
 class AnelTipo(IterEnum):
     FLORESTA = 0,
     ARQUEIRO = 1,

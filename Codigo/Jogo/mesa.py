@@ -1,10 +1,11 @@
 from __future__ import annotations
+from doctest import FAIL_FAST
 from typing import TYPE_CHECKING
 
 from PIL import ImageTk, Image, ImageDraw
 import numpy as np
 
-from .enums import TokenTipo, CartaTipo, AnelTipo, FatiaCor
+from .enums import TokenTipo, CartaTipo, AnelTipo, FatiaCor, FaseTipo
 from .tabuleiro import Tabuleiro
 from .jogador import Jogador
 
@@ -28,7 +29,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
 class Mesa():
     def __init__(self, jogadores, seed: int):    
         self.__turno: int = 0
-        self.__fase: str = "inicio"
+        self.__fase: str = FaseTipo.INICIO
         self.__jogador_no_controle: Jogador = None
         self.__tokens_bloqueados: bool = False
         self.__subestado: str = False
@@ -186,7 +187,7 @@ class Mesa():
         if jogador_passante != self.__jogador_no_controle:
             return False
         
-        self.__fase = "passando"
+        self.__fase = FaseTipo.PASSAGEM
         fim = False
 
         self.__tabuleiro.mover_montros()
@@ -207,7 +208,7 @@ class Mesa():
                 self.__jogador_no_controle.comprar_mao()
 
         self.__tokens_bloqueados = False
-        self.__fase = "inicio"
+        self.__fase = FaseTipo.INICIO
         return True
 
 
@@ -215,10 +216,10 @@ class Mesa():
         if not jogador is self.__jogador_no_controle:
             return False
 
-        if not self.__fase in {"inicio", "descarte"}:
+        if self.__fase > FaseTipo.DESCARTE:
             return False
         
-        self.__fase = "descarte"
+        self.__fase = FaseTipo.DESCARTE
         if jogador is self.__jogador_no_controle:
             pertence: bool = jogador.descartar(carta)
             if pertence:
@@ -259,7 +260,7 @@ class Mesa():
         pertence = jogador.possui_carta(carta)
         if pertence and self.__jogador_no_controle == jogador:
             carta.ativar(jogador)
-            self.__fase = "jogando"
+            self.__fase = FaseTipo.JOGADA
             return True
         return False
 
@@ -267,18 +268,18 @@ class Mesa():
         if not jogador_atual is self.__jogador_no_controle:
             return False
 
-        if self.__fase not in {"inicio", "descarte", "troca"}:
+        if self.__fase > FaseTipo.TROCA:
             return False
-        self.__fase = "troca"
+        self.__fase = FaseTipo.TROCA
 
     def resposta_troca(self, jogador_troca: Jogador, resposta: bool) -> bool:
         pass #TROCA
 
     def declarar_vitoria(self) -> None:
-        self.__fase = "vitoria"
+        self.__fase = FaseTipo.VITORIA
 
     def declarar_derrota(self) -> None:
-        self.__fase = "derrota"
+        self.__fase = FaseTipo.DERROTA
 
     def proximo_jogador(self) -> None:
         atual = self.__jogador_no_controle
