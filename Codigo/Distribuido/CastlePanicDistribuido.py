@@ -81,5 +81,5 @@ class CastlePanicDistribuido(DogPlayerInterface):
     def get_tabuleiro(self):
         return self.__jogo.get_tabuleiro()
     
-    def get_Fase(self) -> FaseTipo:
+    def get_fase(self) -> FaseTipo:
         return self.__jogo.fase
