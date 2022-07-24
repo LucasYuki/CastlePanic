@@ -186,6 +186,7 @@ class Mesa():
         if jogador_passante != self.__jogador_no_controle:
             return False
         
+        self.__fase = "passando"
         fim = False
 
         self.__tabuleiro.mover_montros()
