@@ -34,18 +34,22 @@ class LayoutGame(ttk.Frame):
         # Inicialização dos Botões                
         self.__buttons = ttk.Frame(self)
         self.__buttons.rowconfigure(0, weight=1)
+        self.__buttons_showing = {}
         
         self.__descartar_btn = ttk.Button(self.__buttons, text="Descartar", command=self.descartar)
         self.__descartar_btn.grid(column=0, row=0, sticky=(N, W, E, S))
         self.__buttons.columnconfigure(0, weight=1)
+        self.__buttons_showing[self.__descartar_btn] = True
         
         self.__jogar_btn = ttk.Button(self.__buttons, text="Jogar", command=self.jogar)
         self.__jogar_btn.grid(column=2, row=0, sticky=(N, W, E, S))
         self.__buttons.columnconfigure(2, weight=1)
+        self.__buttons_showing[self.__jogar_btn] = True
         
         self.__passar_btn = ttk.Button(self.__buttons, text="Passar", command=self.passar)
         self.__passar_btn.grid(column=3, row=0, sticky=(N, W, E, S))
         self.__buttons.columnconfigure(3, weight=1)
+        self.__buttons_showing[self.__passar_btn] = True
 
     def __on_resize(self, event):
         #   Calcula a posição de cada uma das partes do layout quando o tamanho 
@@ -109,11 +113,15 @@ class LayoutGame(ttk.Frame):
         #self.__hand_notebook.select(self.__hands[self.__current_player])
 
     def hide_button(self, button):
-        button._grid_info = button.grid_info()
-        button.grid_remove()
+        if self.__buttons_showing[button]:
+            button._grid_info = button.grid_info()
+            button.grid_remove()
+            self.__buttons_showing[button] = False
         
     def show_button(self, button):
-        button.grid(button._grid_info)
+        if not self.__buttons_showing[button]:
+            button.grid(button._grid_info)
+            self.__buttons_showing[button] = True
         
     def zoom(self, img: Image):
         self.__info.zoom(img)
@@ -126,7 +134,7 @@ class LayoutGame(ttk.Frame):
         return self.__padding
     
     def update(self):
-        fase = jogo.get_fase()
+        fase = self.__jogo.get_fase()
         if fase == FaseTipo.INICIO:
             self.show_button(self.__descartar_btn)
             self.show_button(self.__jogar_btn)

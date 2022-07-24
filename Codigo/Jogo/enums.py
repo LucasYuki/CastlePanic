@@ -11,11 +11,11 @@ class IterEnum(IntEnum):
 @unique
 class AcaoJogadorTipo(IterEnum):
     DESCARTAR = 0,
-    DESCARTE = 1,
-    TROCA = 2,
-    JOGADA = 3,
-    VITORIA = 4,
-    DERROTA = 5
+    JOGAR = 1,
+    SELECIONAR_TOKEN = 2,
+    SELECIONAR_POSICAO = 3,
+    SELECIONAR_DESCARTE = 4,
+    PASSAR = 5
 
 @unique
 class FaseTipo(IterEnum):
