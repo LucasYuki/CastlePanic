@@ -3,7 +3,7 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 from .ImageHelper import ImageHelper
 import numpy as np
-from Jogo import Peca, Posicao, Construcao, Monstro
+from Jogo import Peca, Posicao, Construcao, Monstro, Muro, Fortificacao
 
 class BoardView(Canvas):
     __slots__ = ("__layout", "__aspect_ratio", "__img_orig", "__img_tk",
@@ -54,17 +54,38 @@ class BoardView(Canvas):
     def __resize(self):
         size = (self.__current_width//15, self.__current_height//15)
         for posicao, pecas in self.__pecas_dict.items():
-            center_angle = ((60*3 - posicao.fatia*60) % 360)
-            radius = self.__current_width/2/5.3 * (4.8 - posicao.anel.value)
-            for i, peca in enumerate(pecas):
+            n_pecas = len(pecas)
+            if posicao.ha_fortificacao():
+                n_pecas -= 2
+            elif posicao.ha_muro():
+                n_pecas -= 1
+            initial_angle = ((60*3 - posicao.fatia*60) % 360)
+            radius = self.__current_width/2/5 * (4.5 - posicao.anel.value)
+            fortificacao = None
+            i = 0
+            for peca in pecas:
                 rotated_image = peca.get_image().rotate(self.__rotation[peca])
                 self.__imgs[peca] = ImageHelper.get_tk_image(rotated_image, *size)
                 self.itemconfig(self.__peca_idx[peca], image=self.__imgs[peca]) 
                 
-                angle = center_angle + 60/len(pecas)*(i+0.5)
-                x = self.__current_width/2 + np.sin(angle*np.pi/180)*radius - size[0]/2
-                y = self.__current_height/2 + np.cos(angle*np.pi/180)*radius - size[1]/2
-                self.coords(self.__peca_idx[peca], (int(x), int(y)))
+                if isinstance(peca, Muro):
+                    angle = initial_angle + 30
+                    x = self.__current_width/2 + np.sin(angle*np.pi/180)*radius*2 - size[0]/2
+                    y = self.__current_height/2 + np.cos(angle*np.pi/180)*radius*2 - size[1]/2
+                    self.coords(self.__peca_idx[peca], (int(x), int(y)))
+                elif isinstance(peca, Fortificacao):
+                    fortificacao = peca # desenha por último
+                else:
+                    angle = initial_angle + 60/n_pecas*(i+0.5)
+                    x = self.__current_width/2 + np.sin(angle*np.pi/180)*radius - size[0]/2
+                    y = self.__current_height/2 + np.cos(angle*np.pi/180)*radius - size[1]/2
+                    i += 1
+                    self.coords(self.__peca_idx[peca], (int(x), int(y)))
+            if fortificacao is not None:
+                angle = initial_angle + 30
+                x = self.__current_width/2 + np.sin(angle*np.pi/180)*radius*1.1 - size[0]/2
+                y = self.__current_height/2 + np.cos(angle*np.pi/180)*radius*1.1 - size[1]/2
+                self.coords(self.__peca_idx[fortificacao], (int(x), int(y)))
 
     def __on_click(self, event, peca: Peca):
         print("aaa aaaaaaaaaaa")

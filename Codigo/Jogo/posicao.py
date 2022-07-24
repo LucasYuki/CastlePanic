@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from Jogo.peca import Fortificacao, Torre
+from Jogo.peca import Fortificacao, Torre, Muro
 from .enums import ContrucaoTipo
 
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
@@ -29,16 +29,19 @@ class Posicao:
         return self.__pecas
 
     def ha_torre(self) -> bool:
-        return list(filter(isinstance(Torre), self.__pecas)) != []
+        return list(filter(lambda p: isinstance(p, Torre), self.__pecas)) != []
 
     def ha_construcao(self) -> bool:
-        return list(filter(isinstance(Construcao), self.__pecas)) != []
+        return list(filter(lambda p: isinstance(p, Construcao), self.__pecas)) != []
 
+    def ha_muro(self) -> bool:
+        return list(filter(lambda p: isinstance(p, Muro), self.__pecas)) != []
+    
     def ha_fortificacao(self) -> bool:
-        return list(filter(isinstance(Fortificacao), self.__pecas)) != []
+        return list(filter(lambda p: isinstance(p, Fortificacao), self.__pecas)) != []
 
     def haMonstros(self) -> bool:
-        monstros = list(filter(isinstance(Monstro), self.__pecas))
+        monstros = list(filter(lambda p: isinstance(p, Monstro), self.__pecas))
         if monstros == []:
             return False
         return True
@@ -47,7 +50,7 @@ class Posicao:
         self.__pecas.remove(monstro)
 
     def destruir_construcao(self) -> None:
-        construcoes = list(filter(isinstance(Construcao), self.__pecas))
+        construcoes = list(filter(lambda p: isinstance(p, Construcao), self.__pecas))
         tipos = list(map(lambda x: x.tipo, construcoes))
         for tipo in [ContrucaoTipo.FORTIFICACAO, ContrucaoTipo.TORRE, ContrucaoTipo.MURO]:
             if tipo in tipos:
@@ -62,7 +65,7 @@ class Posicao:
                 self.remover_monstro(peca)
 
     def curar_todos(self) -> None:
-        monstros = filter(isinstance(Monstro), self.__pecas)
+        monstros = filter(lambda p: isinstance(p, Monstro), self.__pecas)
         for monstro in monstros:
             monstro.curar()
 
