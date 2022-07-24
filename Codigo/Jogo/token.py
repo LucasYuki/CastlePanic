@@ -16,6 +16,7 @@ class Token(Peca):
         self.__tipo = tipo
         super().__init__()
         
+    @abstractmethod
     def load_image(self): # -> Image
         pass
 

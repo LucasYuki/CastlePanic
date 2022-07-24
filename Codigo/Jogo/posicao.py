@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from Jogo.peca import Fortificacao, Torre
+from .enums import ContrucaoTipo
 
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Peca
@@ -28,16 +29,16 @@ class Posicao:
         return self.__pecas
 
     def ha_torre(self) -> bool:
-        return filter(isinstance(Torre), self.__pecas) != []
+        return list(filter(isinstance(Torre), self.__pecas)) != []
 
     def ha_construcao(self) -> bool:
-        return filter(isinstance(Construcao), self.__pecas) != []
+        return list(filter(isinstance(Construcao), self.__pecas)) != []
 
     def ha_fortificacao(self) -> bool:
-        return filter(isinstance(Fortificacao), self.__pecas) != []
+        return list(filter(isinstance(Fortificacao), self.__pecas)) != []
 
     def haMonstros(self) -> bool:
-        monstros = filter(isinstance(Monstro), self.__pecas)
+        monstros = list(filter(isinstance(Monstro), self.__pecas))
         if monstros == []:
             return False
         return True
@@ -46,13 +47,18 @@ class Posicao:
         self.__pecas.remove(monstro)
 
     def destruir_construcao(self) -> None:
-        pass
+        construcoes = list(filter(isinstance(Construcao), self.__pecas))
+        tipos = list(map(lambda x: x.tipo, construcoes))
+        for tipo in [ContrucaoTipo.FORTIFICACAO, ContrucaoTipo.TORRE, ContrucaoTipo.MURO]:
+            if tipo in tipos:
+                self.__pecas.remove(construcoes[tipos.index(tipo)])
 
     def get_anel_fatia(self) -> tuple:
         return (self.__anel, self.__fatia)
 
+    # NAO USADO
     def novo_monstro(self, monstro: Monstro) -> None:
-        pass
+        self.__pecas.append(monstro)
 
     def remover_todos_monstros(self) -> None:
         for peca in self.__pecas:

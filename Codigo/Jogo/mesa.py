@@ -28,7 +28,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
 class Mesa():
     def __init__(self, jogadores, seed: int):    
         self.__turno: int = 0
-        self.__fase: str = None
+        self.__fase: str = "inicio"
         self.__jogador_no_controle: Jogador = None
         self.__tokens_bloqueados: bool = False
         self.__subestado: str = False
@@ -169,7 +169,7 @@ class Mesa():
         self.__pilha_descarte.append(carta)
 
     def get_num_cartas(self) -> int:
-        pass
+        return len(self.__pilha_cartas)
 
     def get_turn(self) -> int:
         return self.__turno
@@ -177,6 +177,7 @@ class Mesa():
     def get_tabuleiro(self) -> Tabuleiro:
         return self.__tabuleiro
 
+    # NAO USADO
     def set_turno(self, jogador: Jogador) -> None:
         pass
 
@@ -200,16 +201,24 @@ class Mesa():
                 self.__jogador_no_controle.comprar_mao()
 
         self.__tokens_bloqueados = False
-
+        self.__fase = "inicio"
         return True
 
 
     def descartar_compra(self, carta: Carta, jogador: Jogador) -> bool:
+        if not jogador is self.__jogador_no_controle:
+            return False
+
+        if not self.__fase in {"inicio", "descarte"}:
+            return False
+        
+        self.__fase = "descarte"
         if jogador is self.__jogador_no_controle:
             pertence: bool = jogador.descartar(carta)
             if pertence:
                 jogador.comprar_carta()
-
+                return True
+        return False
 
     def selecionar_carta_descarte(self, carta: Carta, jogador: Jogador) -> bool:
         acao: Acao = jogador.get_acao_pendente()
@@ -237,14 +246,24 @@ class Mesa():
             return True
         return False
 
-
     def jogar_carta(self, carta: Carta, jogador: Jogador) -> bool:
+        if not jogador is self.__jogador_no_controle:
+            return False
+        
         pertence = jogador.possui_carta(carta)
         if pertence and self.__jogador_no_controle == jogador:
             carta.ativar(jogador)
+            self.__fase = "jogando"
+            return True
+        return False
 
     def troca(self, carta_atual: Carta, carta_troca: Carta, jogador_atual: Jogador, jogador_troca: Jogador) -> bool:
-        pass
+        if not jogador_atual is self.__jogador_no_controle:
+            return False
+
+        if self.__fase not in {"inicio", "descarte", "troca"}:
+            return False
+        self.__fase = "troca"
 
     def resposta_troca(self, jogador_troca: Jogador, resposta: bool) -> bool:
         pass
@@ -265,10 +284,8 @@ class Mesa():
             self.__jogador_no_controle = jogadores[jogadores.index(atual) + 1]
 
     def descartar_todas(self, carta_tipo: CartaTipo) -> None:
-        # Entradas possiveis: arqueiro, espadachin, cavaleiro
         for jogador in self.__jogadores:
             jogador.descartar_todas(carta_tipo)
-        pass
 
     def todos_descartam_um(self) -> None:
         for jogador in self.__jogadores:
@@ -277,8 +294,8 @@ class Mesa():
     def bloquear_tokens(self) -> None:
         self.__tokens_bloqueados = True
 
-    def colocar_peca(self, peca: Peca.Peca, anel: int, fatia: int) -> None:
-        pass
+    def colocar_peca(self, peca: Peca, anel: int, fatia: int) -> None:
+        self.__tabuleiro.colocar_peca(peca, anel, fatia)
 
     def get_token(self) -> Token:
         if self.__tokens_bloqueados or not len(self.__saco_tokens):

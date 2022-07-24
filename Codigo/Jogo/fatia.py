@@ -36,6 +36,7 @@ class Fatia:
     def get_posicao(self, anel: AnelTipo) -> Posicao:
         return self.__aneis[anel]
 
+    # NAO USADO
     def novo_monstro(self, monstro: Monstro) -> None:
         pass
 

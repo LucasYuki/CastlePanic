@@ -9,10 +9,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Posicao
     from Jogo import Mesa
     from Jogo import Token
-
-class Peca:
-    def __init__(self) -> None:
-        pass
+    from Jogo import Peca
 
 class Tabuleiro:
     def __init__(self):
