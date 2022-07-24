@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 from PIL import ImageTk, Image
 from abc import ABC, abstractmethod
 
+from Jogo.carta import BoaMira
+
 from .enums import CartaTipo, AnelTipo, FatiaCor
 from Jogo import Acao
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
@@ -17,10 +19,6 @@ class Ataque(Acao, ABC):
         super().__init__(imagem, tipo)
         self.__anel: set[AnelTipo] = aneis
         self.__cor: FatiaCor = cores
-
-    def ativar(self, jogador: Jogador) -> None:
-        return super().ativar(jogador)
-        pass
 
     @abstractmethod
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
@@ -76,7 +74,16 @@ class Dano(Ataque):
             raise ValueError("Tipo da carta dano deve ser arqueiro, cavaleiro, espadachim ou heroi. Tipo recebido é %s" %str(carta_tipo))
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        return super().agir(jogador, pos, monstro)
+        efeitos_pendentes: set = jogador.get_cartas_efeitos_pendentes()
+        boa_mira = list(filter(type(BoaMira), efeitos_pendentes))
+        if boa_mira != []:
+            boa_mira = boa_mira[0] #Nao tenho certeza se da pra ter duas boas miras, se so da 1 fica mais facil
+            jogador.remove_efeito_pendente(boa_mira)
+        else:
+            morto = monstro.danificar()
+            if morto:
+                pos.remover_monstro(monstro)
+        jogador.remove_acao_pendente()
 
 class Empurrao(Ataque):
     def __init__(self, tipo: CartaTipo):
@@ -84,7 +91,9 @@ class Empurrao(Ataque):
         super().__init__(imagem, CartaTipo.EMPURRAO)
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        return super().agir(jogador, pos, monstro)
+        pos.remover_monstro(monstro)
+        jogador.mesa.colocar_peca(monstro, AnelTipo.FLORESTA , pos.fatia)
+        jogador.remove_acao_pendente()
 
 class Pixe(Ataque):
     def __init__(self, idx: str, imagem: Image, tipo: CartaTipo):
@@ -92,7 +101,8 @@ class Pixe(Ataque):
         super().__init__(imagem, CartaTipo.PIXE)
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        return super().agir(jogador, pos, monstro)
+        monstro.imobilizar(jogador.mesa.get_turn())
+        jogador.remove_acao_pendente()
 
 class Barbaro(Ataque):
     def __init__(self, idx: str, imagem: Image, tipo: CartaTipo):
@@ -100,4 +110,5 @@ class Barbaro(Ataque):
         super().__init__(imagem, CartaTipo.BARBARO)
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        return super().agir(jogador, pos, monstro)
+        pos.remover_monstro(monstro)
+        jogador.remove_acao_pendente()

@@ -15,6 +15,7 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Monstro
     from Jogo import Posicao
     from Jogo import Peca
+    from Jogo import Carta
 
 class Mesa():
     def __init__(self, jogadores, seed: int):    
@@ -25,9 +26,9 @@ class Mesa():
         self.__subestado: str = False
         
         self.__tabuleiro = Tabuleiro()
-        self.__descarte_tokens: list[Token.Token] = []
-        self.__pilha_cartas: list[Carta.Carta] = []
-        self.__pilha_descarte: list[Carta.Carta] = []
+        self.__descarte_tokens: list[Token] = []
+        self.__pilha_cartas: list[Carta] = []
+        self.__pilha_descarte: list[Carta] = []
         self.__saco_tokens: list[Token] = []
         
         # Inicializa Tokens
@@ -109,7 +110,7 @@ class Mesa():
         pass
 
     def get_turn(self) -> int:
-        pass
+        return self.__turno
 
     def get_tabuleiro(self) -> Tabuleiro:
         return self.__tabuleiro
@@ -132,10 +133,12 @@ class Mesa():
     def selecionar_posicao(self, pos: Posicao.Posicao, jogador: Jogador) -> bool:
         pass
 
-    def jogar_carta(self, carta: Carta.Carta, jogador: Jogador) -> bool:
-        pass
+    def jogar_carta(self, carta: Carta, jogador: Jogador) -> bool:
+        pertence = jogador.possui_carta(carta)
+        if pertence and self.__jogador_no_controle == jogador:
+            carta.ativar(jogador)
 
-    def troca(self, carta_atual: Carta.Carta, carta_troca: Carta.Carta, jogador_atual: Jogador, jogador_troca: Jogador) -> bool:
+    def troca(self, carta_atual: Carta, carta_troca: Carta, jogador_atual: Jogador, jogador_troca: Jogador) -> bool:
         pass
 
     def resposta_troca(self, jogador_troca: Jogador, resposta: bool) -> bool:
@@ -160,7 +163,7 @@ class Mesa():
         pass
 
     def bloquear_tokens(self) -> None:
-        pass
+        self.__tokens_bloqueados = True
 
     def colocar_peca(self, peca: Peca.Peca, anel: int, fatia: int) -> None:
         pass

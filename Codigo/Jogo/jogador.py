@@ -22,6 +22,10 @@ class Jogador():
         self.__acao_pendente: Carta = None #Mudar Carta para Acao
         self.__carta_efeito_pendente: set[Carta] = set()
         
+    @property
+    def mesa(self):
+        return self.__mesa
+    
     # NAO MEXI NISSO
     def colocar_na_mao(self, carta: Carta):
         self.__mao.append(carta)
@@ -46,7 +50,7 @@ class Jogador():
         pass
 
     def descartar(self, carta: Carta) -> bool:
-        pass
+        self.__mao.remove(carta)
 
     def descartar_escolhida(self, carta_nome: str) -> None:
         pass
@@ -59,7 +63,8 @@ class Jogador():
         pass
 
     def remove_acao_pendente(self) -> None:
-        pass
+        self.descartar(self.__acao_pendente)
+        self.__acao_pendente = None
 
     def get_acao_pendente(self) -> Carta:
         pass
@@ -68,10 +73,11 @@ class Jogador():
         pass
 
     def remove_efeito_pendente(self, carta: Carta) -> None:
-        pass
+        self.__carta_efeito_pendente.remove(carta)
+        self.descartar(carta)
 
     def get_cartas_efeitos_pendentes(self) -> None:
-        pass
+        return self.__carta_efeito_pendente
 
     def encerra_turno(self) -> None:
         pass # kkkkk

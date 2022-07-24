@@ -15,8 +15,8 @@ class Acao(Carta, ABC):
     def __init__(self, imagem: Image, tipo: CartaTipo):
         super().__init__(imagem, tipo)
 
-    def ativar(self, jogador: Jogador.Jogador) -> None:
-        pass
+    def ativar(self, jogador: Jogador) -> None:
+        jogador.set_acao_pendente(self)
 
     @abstractmethod
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, 
@@ -27,12 +27,8 @@ class Reciclar(Acao):
     def __init__(self):
         imagem = None # Colocar imagem de cada tipo de carta
         super().__init__(imagem, CartaTipo.RECICLAR)
-
-    def ativar(self, jogador: Jogador.Jogador) -> None:
-        pass
-        return super().ativar(jogador)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, monstro: Monstro.Monstro = None) -> None:
+    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass
         return super().agir(jogador, pos, monstro)
 
@@ -40,12 +36,8 @@ class Fortificar(Acao):
     def __init__(self):
         imagem = None # Colocar imagem de cada tipo de carta
         super().__init__(imagem, CartaTipo.FORTIFICAR)
-
-    def ativar(self, jogador: Jogador.Jogador) -> None:
-        pass
-        return super().ativar(jogador)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, monstro: Monstro.Monstro = None) -> None:
+    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass
         return super().agir(jogador, pos, monstro)
 
@@ -59,9 +51,9 @@ class ReparoMuro(Acao):
             super().__init__(imagem, tipo)
 
     def ativar(self, jogador: Jogador.Jogador) -> None:
-        pass
+        jogador.set_acao_pendente(self)
         return super().ativar(jogador)
     
-    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, monstro: Monstro.Monstro = None) -> None:
+    def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass
         return super().agir(jogador, pos, monstro)

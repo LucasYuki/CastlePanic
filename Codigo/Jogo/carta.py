@@ -38,18 +38,21 @@ class Perdido(Carta):
         super().__init__(imagem, CartaTipo.PERDIDO)
 
     def ativar(self, jogador: Jogador) -> None:
-        pass
+        jogador.mesa.bloquear_tokens()
+        jogador.descartar(self)
 
 class Comprar(Carta):
     def __init__(self):
         super().__init__(imagem, CartaTipo.COMPRAR)
 
     def ativar(self, jogador: Jogador) -> None:
-        pass
+        for _ in range(2):
+            jogador.comprar_carta()
+        jogador.descartar(self)
 
 class BoaMira(Carta):
     def __init__(self):
         super().__init__(imagem, CartaTipo.BOAMIRA)
 
     def ativar(self, jogador: Jogador) -> None:
-        pass
+        jogador.add_carta_efeito_pendente(self)
