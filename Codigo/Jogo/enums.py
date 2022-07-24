@@ -9,14 +9,22 @@ class IterEnum(IntEnum):
         return member_list
 
 @unique
+class AcaoJogadorTipo(IterEnum):
+    DESCARTAR = 0,
+    DESCARTE = 1,
+    TROCA = 2,
+    JOGADA = 3,
+    VITORIA = 4,
+    DERROTA = 5
+
+@unique
 class FaseTipo(IterEnum):
     PASSAGEM = 0,
     INICIO = 1,
     DESCARTE = 2,
-    TROCA = 3,
-    JOGADA = 4,
-    VITORIA = 5,
-    DERROTA = 6
+    JOGADA = 3,
+    VITORIA = 4,
+    DERROTA = 5
 
 @unique
 class AnelTipo(IterEnum):

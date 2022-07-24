@@ -162,6 +162,10 @@ class Mesa():
     @property
     def turno(self):
         return self.__turno
+    
+    @property
+    def fase(self):
+        return self.__fase
 
     def get_carta_compra(self) -> Carta:
         return self.__pilha_cartas.pop()
