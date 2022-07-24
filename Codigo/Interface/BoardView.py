@@ -48,7 +48,8 @@ class BoardView(Canvas):
         pecas_dict = board.get_pecas_dict()
         for posicao, pecas in pecas_dict.items():
             #colocar as pecas igual cartas no outro bagulho
-    
+            pass
+
     @property
     def aspect_ratio(self):
         return self.__aspect_ratio

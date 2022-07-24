@@ -99,10 +99,10 @@ class Mesa():
     def turno(self):
         return self.__turno
 
-    def get_carta_compra(self) -> Carta.Carta:
+    def get_carta_compra(self) -> Carta:
         pass
 
-    def put_descarte(self, carta: Carta.Carta) -> None:
+    def put_descarte(self, carta: Carta) -> None:
         pass
 
     def get_num_cartas(self) -> int:
@@ -111,7 +111,7 @@ class Mesa():
     def get_turn(self) -> int:
         pass
 
-    def get_tabuleiro(self) -> Tabuleiro.Tabuleiro:
+    def get_tabuleiro(self) -> Tabuleiro:
         return self.__tabuleiro
 
     def set_turno(self, jogador: Jogador) -> None:
@@ -126,7 +126,7 @@ class Mesa():
     def selecionar_carta_descarte(self, carta: Carta, jogador: Jogador) -> bool:
         pass
 
-    def selecionar_monstro(self, monstro: Monstro.Monstro, pos: Posicao.Posicao, jogador: Jogador) -> bool:
+    def selecionar_monstro(self, monstro: Monstro, pos: Posicao, jogador: Jogador) -> bool:
         pass
 
     def selecionar_posicao(self, pos: Posicao.Posicao, jogador: Jogador) -> bool:

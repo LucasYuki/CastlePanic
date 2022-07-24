@@ -77,3 +77,6 @@ class CastlePanicDistribuido(DogPlayerInterface):
         move_info["Action"] = action
         move_info["match_status"] = "progress"
         self._dog_server_interface.send_move(move_info)
+    
+    def get_tabuleiro(self):
+        return self.__jogo.get_tabuleiro()
