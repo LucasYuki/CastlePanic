@@ -26,13 +26,20 @@ class Tabuleiro:
         self.__fatias[fatia].colocar_peca(peca, anel)
 
     def verificar_torres_destruidas(self) -> bool:
-        pass
+        for fatia in self.__fatias:
+            if not fatia.verificar_torres_destruidas():
+                return False
+        return True
 
     def haMonstros(self) -> bool:
-        pass
+        for fatia in self.__fatias:
+            if fatia.haMonstros():
+                return True
+        return False
 
     def criar_tokens(self) -> None:
-        pass
+        for _ in range(2):
+            self.novo_token()
 
     def mover_montros(self) -> None:
         pecas_dict: dict = self.get_pecas_dict()

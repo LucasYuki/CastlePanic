@@ -29,7 +29,7 @@ class Mesa():
     def __init__(self, jogadores, seed: int):    
         self.__turno: int = 0
         self.__fase: str = None
-        self.__jogador_no_controle: str = None
+        self.__jogador_no_controle: Jogador = None
         self.__tokens_bloqueados: bool = False
         self.__subestado: str = False
         
@@ -166,7 +166,7 @@ class Mesa():
         return self.__pilha_cartas.pop()
 
     def put_descarte(self, carta: Carta) -> None:
-        pass
+        self.__pilha_descarte.append(carta)
 
     def get_num_cartas(self) -> int:
         pass
@@ -180,11 +180,36 @@ class Mesa():
     def set_turno(self, jogador: Jogador) -> None:
         pass
 
-    def passar_jogada(self, jogador_id: str) -> bool:
-        pass
+    def passar_jogada(self, jogador_passante: Jogador) -> bool:
+        # Guarda
+        if jogador_passante != self.__jogador_no_controle:
+            return False
+        
+        self.__tabuleiro.mover_montros()
+        self.__tabuleiro.criar_tokens()
+        destruidas = self.__tabuleiro.verificar_torres_destruidas()
 
-    def descartar_compra(self, carta: Carta, jogador_id: str) -> bool:
-        pass
+        if destruidas:
+            self.declarar_derrota()
+        else:
+            haMonstros = self.__tabuleiro.haMonstros()
+            if not haMonstros:
+                self.declarar_vitoria()
+            else:
+                self.proximo_jogador()
+                self.__jogador_no_controle.comprar_mao()
+
+        self.__tokens_bloqueados = False
+
+        return True
+
+
+    def descartar_compra(self, carta: Carta, jogador: Jogador) -> bool:
+        if jogador is self.__jogador_no_controle:
+            pertence: bool = jogador.descartar(carta)
+            if pertence:
+                jogador.comprar_carta()
+
 
     def selecionar_carta_descarte(self, carta: Carta, jogador: Jogador) -> bool:
         acao: Acao = jogador.get_acao_pendente()
@@ -231,16 +256,23 @@ class Mesa():
         pass
 
     def proximo_jogador(self) -> None:
-        pass
+        atual = self.__jogador_no_controle
+        atual.encerra_turno()
+        jogadores = list(self.jogadores.values())
+        if jogadores[-1] == atual:
+            self.__jogador_no_controle = jogadores[0]
+        else:
+            self.__jogador_no_controle = jogadores[jogadores.index(atual) + 1]
 
-    def descartar_todas(self, carta_tipo: str) -> None:
+    def descartar_todas(self, carta_tipo: CartaTipo) -> None:
         # Entradas possiveis: arqueiro, espadachin, cavaleiro
         for jogador in self.__jogadores:
             jogador.descartar_todas(carta_tipo)
         pass
 
     def todos_descartam_um(self) -> None:
-        pass
+        for jogador in self.__jogadores:
+            jogador.descartar_aleatoria()
 
     def bloquear_tokens(self) -> None:
         self.__tokens_bloqueados = True

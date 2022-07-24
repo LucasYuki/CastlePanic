@@ -51,8 +51,8 @@ class Descarta(Token):
     def __init__(self) -> None:
         super().__init__(TokenTipo.DESCARTA)
 
-    def invocar(self, mesa: Mesa.Mesa):
-        pass
+    def invocar(self, mesa: Mesa):
+        mesa.todos_descartam_um()
     
     def load_image(self): # -> Image
         return Image.open("Images/base/T_discard_1.png")
@@ -80,7 +80,7 @@ class Praga(Token):
         else:
             raise ValueError("Tipo da carta deve ser arqueito, cavaleiro ou espadachim. Tipo recebido é %s" %str(carta_tipo))
 
-    def invocar(self, mesa: Mesa.Mesa):
+    def invocar(self, mesa: Mesa):
         mesa.descartar_todas(self.__carta_tipo)
 
     def load_image(self): # -> Image
