@@ -1,11 +1,17 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from random import randrange
+
 from urllib.parse import ParseResultBytes
+
+from Jogo.enums import CartaTipo
+from Jogo.token import Descarta
 
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Carta
     from Jogo import Mesa
+    from Jogo import Acao
 
 class Jogador():
     def __init__(self, nome: str, idx: str, ordem: str, mesa: Mesa):
@@ -19,7 +25,7 @@ class Jogador():
 
         self.__pontos: int  = None
         self.__mesa: Mesa = mesa
-        self.__acao_pendente: Carta = None #Mudar Carta para Acao
+        self.__acao_pendente: Acao = None #Mudar Carta para Acao
         self.__carta_efeito_pendente: set[Carta] = set()
         
     @property
@@ -41,7 +47,7 @@ class Jogador():
             self.comprar_carta()
 
     def tirar_da_mao(self, carta: Carta) -> Carta:
-        pass
+        self.__mao.remove(carta)
 
     def possui_carta(self, carta: Carta) -> bool:
         return carta in self.__mao
@@ -50,27 +56,34 @@ class Jogador():
         pass
 
     def descartar(self, carta: Carta) -> bool:
+        if not carta in self.__mao:
+            return False
         self.__mao.remove(carta)
+        self.__mesa.put_descarte(carta)
+        return True
 
-    def descartar_escolhida(self, carta_nome: str) -> None:
-        pass
+    # Acho que ta certo
+    def descartar_aleatoria(self) -> None:
+        if self.__mao == []:
+            return
+        self.__mao.pop(randrange(0, len(self.__mao)))
+        
 
-    def descartar_todas(self, carta_nome: str) -> None:
-        # Entradas possiveis: arqueiro, espadachin, cavaleiro
-        pass
+    def descartar_todas(self, carta_tipo: CartaTipo) -> None:
+        self.__mao = list(filter(lambda x: x.tipo != carta_tipo, self.__mao))
 
     def set_acao_pendente(self, carta: Carta) -> None:
-        pass
+        self.__acao_pendente = carta
 
     def remove_acao_pendente(self) -> None:
         self.descartar(self.__acao_pendente)
         self.__acao_pendente = None
 
     def get_acao_pendente(self) -> Carta:
-        pass
+        return self.__acao_pendente
 
     def add_carta_efeito_pendente(self, carta: Carta) -> None:
-        pass
+        self.__carta_efeito_pendente.add(carta)
 
     def remove_efeito_pendente(self, carta: Carta) -> None:
         self.__carta_efeito_pendente.remove(carta)
@@ -80,7 +93,8 @@ class Jogador():
         return self.__carta_efeito_pendente
 
     def encerra_turno(self) -> None:
-        pass # kkkkk
+        self.__acao_pendente = None
+        self.__carta_efeito_pendente.clear()
 
     def get_mao(self) -> None: #Mudar o returno aqui?
         return self.__mao

@@ -18,7 +18,10 @@ class Fatia:
         return self.__aneis
 
     def verificar_torres_destruidas(self) -> bool:
-        pass
+        for posicao in self.__aneis.values():
+            if posicao.ha_torre():
+               return False 
+        return True
 
     def haMonstros(self) -> bool:
         for posicao in self.__aneis.values():
@@ -26,8 +29,9 @@ class Fatia:
                 return True
         return False
 
+    # ACHO QUE EH ISSO
     def ha_construcoes(self, destino: Posicao) -> bool:
-        pass
+        return destino.ha_construcao()
 
     def get_posicao(self, anel: AnelTipo) -> Posicao:
         return self.__aneis[anel]
