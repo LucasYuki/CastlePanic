@@ -12,7 +12,7 @@ class IterEnum(IntEnum):
 class AcaoJogadorTipo(IterEnum):
     DESCARTAR = 0,
     JOGAR = 1,
-    SELECIONAR_TOKEN = 2,
+    SELECIONAR_MONSTRO = 2,
     SELECIONAR_POSICAO = 3,
     SELECIONAR_DESCARTE = 4,
     PASSAR = 5
