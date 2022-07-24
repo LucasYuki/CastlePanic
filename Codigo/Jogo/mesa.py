@@ -264,17 +264,6 @@ class Mesa():
             return True
         return False
 
-    def troca(self, carta_atual: Carta, carta_troca: Carta, jogador_atual: Jogador, jogador_troca: Jogador) -> bool:
-        if not jogador_atual is self.__jogador_no_controle:
-            return False
-
-        if self.__fase > FaseTipo.TROCA:
-            return False
-        self.__fase = FaseTipo.TROCA
-
-    def resposta_troca(self, jogador_troca: Jogador, resposta: bool) -> bool:
-        pass #TROCA
-
     def declarar_vitoria(self) -> None:
         self.__fase = FaseTipo.VITORIA
 
