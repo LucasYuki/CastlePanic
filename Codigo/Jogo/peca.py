@@ -48,7 +48,7 @@ class Torre(Construcao):
         self._tipo = ContrucaoTipo.TORRE
         
     def load_image(self):
-        return Image.open("Images/base/Torre.png")
+        return Image.open("Images/base/Torre2.png")
 
 class Muro(Construcao):
     def __init__(self) -> None:
@@ -57,7 +57,7 @@ class Muro(Construcao):
         self._tipo = ContrucaoTipo.MURO
     
     def load_image(self):
-        return Image.open("Images/base/Muro.png")
+        return Image.open("Images/base/Muro2.png")
 
 class Fortificacao(Construcao):
     def __init__(self) -> None:
