@@ -202,8 +202,16 @@ class Mesa():
                 return True
         return False
 
-    def selecionar_posicao(self, pos: Posicao.Posicao, jogador: Jogador) -> bool:
-        pass
+    def selecionar_posicao(self, pos: Posicao, jogador: Jogador) -> bool:
+        acao: Acao = jogador.get_acao_pendente()
+        if isinstance(acao, Fortificar) and pos.ha_construcao() and not pos.ha_fortificacao():
+            acao.agir(None, jogador, pos, None)
+            return True
+        elif isinstance(acao, ReparoMuro) and not pos.ha_construcao():
+            acao.agir(None, jogador, pos, None)
+            return True
+        return False
+
 
     def jogar_carta(self, carta: Carta, jogador: Jogador) -> bool:
         pertence = jogador.possui_carta(carta)

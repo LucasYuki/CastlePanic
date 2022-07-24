@@ -1,10 +1,13 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from Jogo.peca import Fortificacao, Torre
+
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Peca
     from Jogo import Monstro
     from Jogo import AnelTipo
+    from Jogo import Construcao
 
 class Posicao:
     def __init__(self, fatia : int, anel : AnelTipo) -> None:
@@ -25,16 +28,19 @@ class Posicao:
         return self.__pecas
 
     def ha_torre(self) -> bool:
-        pass
+        return filter(isinstance(Torre), self.__pecas) != []
+
+    def ha_construcao(self) -> bool:
+        return filter(isinstance(Construcao), self.__pecas) != []
+
+    def ha_fortificacao(self) -> bool:
+        return filter(isinstance(Fortificacao), self.__pecas) != []
 
     def haMonstros(self) -> bool:
         monstros = filter(isinstance(Monstro), self.__pecas)
         if monstros == []:
             return False
         return True
-
-    def ha_construcao(self) -> bool:
-        pass
 
     def remover_monstro(self, monstro: Monstro) -> None:
         self.__pecas.remove(monstro)

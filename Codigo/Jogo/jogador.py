@@ -76,7 +76,7 @@ class Jogador():
         self.__carta_efeito_pendente.remove(carta)
         self.descartar(carta)
 
-    def get_cartas_efeitos_pendentes(self) -> None:
+    def get_cartas_efeitos_pendentes(self) -> set:
         return self.__carta_efeito_pendente
 
     def encerra_turno(self) -> None:

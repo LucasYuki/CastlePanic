@@ -18,7 +18,7 @@ class Ataque(Acao, ABC):
     def __init__(self, imagem: Image, tipo: CartaTipo, aneis: set, cores: FatiaCor):
         super().__init__(imagem, tipo)
         self.__anel: set[AnelTipo] = aneis
-        self.__cor: set[FatiaCor] = cores
+        self.__cor: FatiaCor = cores
 
     @abstractmethod
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
@@ -28,7 +28,7 @@ class Ataque(Acao, ABC):
         pass
 
     def verificar_alcance(self, pos: Posicao) -> bool:
-        return pos.anel in self.__anel and pos.fatia in self.__cor
+        return pos.anel in self.__anel and (pos.fatia == self.__cor or self.__cor == FatiaCor.TODAS) 
 
 class Dano(Ataque):
     def __init__(self, tipo: CartaTipo, cor: FatiaCor):

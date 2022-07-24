@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 from PIL import ImageTk, Image
 from abc import ABC, abstractmethod
 
+from .peca import Fortificacao, Muro
+
 from .enums import CartaTipo
 from Jogo import Carta
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
@@ -38,8 +40,9 @@ class Fortificar(Acao):
         super().__init__(imagem, CartaTipo.FORTIFICAR)
     
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        pass
-        return super().agir(jogador, pos, monstro)
+        fortificacao = Fortificacao()
+        jogador.mesa.colocar_peca(fortificacao, pos.anel, pos.fatia)
+        jogador.remove_acao_pendente()
 
 class ReparoMuro(Acao):
     def __init__(self, tipo: CartaTipo):
@@ -60,5 +63,10 @@ class ReparoMuro(Acao):
             jogador.add_carta_efeito_pendente(self)
     
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        pass
-        return super().agir(jogador, pos, monstro)
+        muro = Muro()
+        jogador.mesa.colocar_peca(muro, pos.anel, pos.fatia)
+        efeitos = jogador.get_cartas_efeitos_pendentes()
+        tipo_oposto = CartaTipo.TIJOLO if self.__tipo == CartaTipo.MORTAR else CartaTipo.MORTAR
+        carta_oposta = list(filter(lambda x: x.tipo == tipo_oposto, efeitos))
+        jogador.remove_efeito_pendente(carta_oposta[0])
+        jogador.remove_acao_pendente()
