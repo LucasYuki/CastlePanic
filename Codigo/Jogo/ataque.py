@@ -32,41 +32,55 @@ class Ataque(Acao, ABC):
 
 class Dano(Ataque):
     def __init__(self, tipo: CartaTipo, cor: FatiaCor):
-        imagem = None # Colocar imagem de cada tipo de carta
         if tipo == CartaTipo.ARQUEIRO:
             if cor == FatiaCor.VERMELHO:
+                imagem = Image.open("Images/base/C_archer_r.png")
                 super().__init__(imagem, tipo, {AnelTipo.ARQUEIRO}, cor)
             elif cor == FatiaCor.VERDE:
+                imagem = Image.open("Images/base/C_archer_g.png")
                 super().__init__(imagem, tipo, {AnelTipo.ARQUEIRO}, cor)
             elif cor == FatiaCor.AZUL:
+                imagem = Image.open("Images/base/C_archer_b.png")
                 super().__init__(imagem, tipo, {AnelTipo.ARQUEIRO}, cor)
             elif cor == FatiaCor.TODAS:
+                imagem = Image.open("Images/base/C_archer_a.png")
                 super().__init__(imagem, tipo, {AnelTipo.ARQUEIRO}, cor)
         elif tipo == CartaTipo.CAVALEIRO:
             if cor == FatiaCor.VERMELHO:
+                imagem = Image.open("Images/base/C_knight_r.png")
                 super().__init__(imagem, tipo, {AnelTipo.CAVALEIRO}, cor)
             elif cor == FatiaCor.VERDE:
+                imagem = Image.open("Images/base/C_knight_g.png")
                 super().__init__(imagem, tipo, {AnelTipo.CAVALEIRO}, cor)
             elif cor == FatiaCor.AZUL:
+                imagem = Image.open("Images/base/C_knight_b.png")
                 super().__init__(imagem, tipo, {AnelTipo.CAVALEIRO}, cor)
             elif cor == FatiaCor.TODAS:
+                imagem = Image.open("Images/base/C_knight_a.png")
                 super().__init__(imagem, tipo, {AnelTipo.CAVALEIRO}, cor)
         elif tipo == CartaTipo.ESPADACHIM:
             if cor == FatiaCor.VERMELHO:
+                imagem = Image.open("Images/base/C_swordman_r.png")
                 super().__init__(imagem, tipo, {AnelTipo.ESPADACHIM}, cor)
             elif cor == FatiaCor.VERDE:
+                imagem = Image.open("Images/base/C_swordman_g.png")
                 super().__init__(imagem, tipo, {AnelTipo.ESPADACHIM}, cor)
             elif cor == FatiaCor.AZUL:
+                imagem = Image.open("Images/base/C_swordman_b.png")
                 super().__init__(imagem, tipo, {AnelTipo.ESPADACHIM}, cor)
             elif cor == FatiaCor.TODAS:
+                imagem = Image.open("Images/base/C_swordman_a.png")
                 super().__init__(imagem, tipo, {AnelTipo.ESPADACHIM}, cor)
         elif tipo == CartaTipo.HEROI:
             aneis_heroi = {AnelTipo.ARQUEIRO, AnelTipo.CAVALEIRO, AnelTipo.ESPADACHIM}
             if cor == FatiaCor.VERMELHO:
+                imagem = Image.open("Images/base/C_hero_r.png")
                 super().__init__(imagem, tipo, aneis_heroi, cor)
             elif cor == FatiaCor.VERDE:
+                imagem = Image.open("Images/base/C_hero_g.png")
                 super().__init__(imagem, tipo, aneis_heroi, cor)
             elif cor == FatiaCor.AZUL:
+                imagem = Image.open("Images/base/C_hero_b.png")
                 super().__init__(imagem, tipo, aneis_heroi, cor)
             else:
                 raise ValueError("O heroí deve ser de uma das cores, não exite herói de todas as cores")
@@ -86,9 +100,13 @@ class Dano(Ataque):
         jogador.remove_acao_pendente()
 
 class Empurrao(Ataque):
-    def __init__(self, tipo: CartaTipo):
-        imagem = None # Colocar imagem de cada tipo de carta
-        super().__init__(imagem, CartaTipo.EMPURRAO)
+    def __init__(self):
+        imagem = Image.open("Images/base/C_drive_him_back.png")
+        fatias = {AnelTipo.ARQUEIRO, 
+                  AnelTipo.CAVALEIRO,
+                  AnelTipo.ESPADACHIM,
+                  AnelTipo.CASTELO}
+        super().__init__(imagem, CartaTipo.EMPURRAO, fatias, FatiaCor.TODAS)
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pos.remover_monstro(monstro)
@@ -96,18 +114,26 @@ class Empurrao(Ataque):
         jogador.remove_acao_pendente()
 
 class Pixe(Ataque):
-    def __init__(self, idx: str, imagem: Image, tipo: CartaTipo):
-        imagem = None # Colocar imagem de cada tipo de carta
-        super().__init__(imagem, CartaTipo.PIXE)
+    def __init__(self):
+        imagem = Image.open("Images/base/C_tar.png")
+        fatias = {AnelTipo.ARQUEIRO, 
+                  AnelTipo.CAVALEIRO,
+                  AnelTipo.ESPADACHIM,
+                  AnelTipo.CASTELO}
+        super().__init__(imagem, CartaTipo.PIXE, fatias, FatiaCor.TODAS)
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         monstro.imobilizar(jogador.mesa.get_turn())
         jogador.remove_acao_pendente()
 
 class Barbaro(Ataque):
-    def __init__(self, idx: str, imagem: Image, tipo: CartaTipo):
-        imagem = None # Colocar imagem de cada tipo de carta
-        super().__init__(imagem, CartaTipo.BARBARO)
+    def __init__(self):
+        imagem = Image.open("Images/base/C_barbarian.png")
+        fatias = {AnelTipo.ARQUEIRO, 
+                  AnelTipo.CAVALEIRO,
+                  AnelTipo.ESPADACHIM,
+                  AnelTipo.CASTELO}
+        super().__init__(imagem, CartaTipo.BARBARO, fatias, FatiaCor.TODAS)
     
     def agir(carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pos.remover_monstro(monstro)
