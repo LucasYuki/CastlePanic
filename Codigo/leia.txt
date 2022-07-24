@@ -1,0 +1,4 @@
+Para executar:
+    - Crie ou abra um virtual environment
+    - Instale as bibliotecas necessárias: "pip install -r requirements.txt"
+    - Execute o jogo: "python main.py"
