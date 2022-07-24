@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from PIL import Image
 from random import randrange
 from abc import ABC, abstractmethod
 
@@ -22,15 +23,18 @@ class Token(Peca):
     def invocar(self, mesa: Mesa):
         pass
 
+    def get_tipo(self) -> TokenTipo:
+        return self.__tipo
+    
 class ComprarTokens(Token):
     def __init__(self, n_tokens: int) -> None:
+        self.__n_tokens: int = n_tokens
         if n_tokens == 3:
             super().__init__(TokenTipo.COMPRAR_TOKEN_3)
         elif n_tokens == 4:
             super().__init__(TokenTipo.COMPRAR_TOKEN_4)
         else:
             raise ValueError("Número de tokens deve ser 3 ou 4. Valor recebido %s" %str(n_tokens))
-        self.__n_tokens: int = n_tokens
 
     def invocar(self, mesa: Mesa.Mesa):
         tabuleiro = mesa.get_tabuleiro()
@@ -38,7 +42,10 @@ class ComprarTokens(Token):
             tabuleiro.novo_token()
     
     def load_image(self): # -> Image
-        pass
+        if self.__n_tokens == 3:
+            return Image.open("Images/base/T_draw_3.png")
+        elif self.__n_tokens == 4:
+            return Image.open("Images/base/T_draw_4.png")
 
 class Descarta(Token):
     def __init__(self) -> None:
@@ -46,6 +53,9 @@ class Descarta(Token):
 
     def invocar(self, mesa: Mesa.Mesa):
         pass
+    
+    def load_image(self): # -> Image
+        return Image.open("Images/base/T_discard_1.png")
 
 class Pedra(Token):
     def __init__(self) -> None:
@@ -54,9 +64,13 @@ class Pedra(Token):
     def invocar(self, mesa: Mesa.Mesa):
         fatia: int = randrange(0,6)
         mesa.get_tabuleiro().pedra(fatia)
+    
+    def load_image(self): # -> Image
+        return Image.open("Images/base/T_boulder.png")
 
 class Praga(Token):
     def __init__(self, carta_tipo: CartaTipo) -> None:
+        self.__carta_tipo: CartaTipo = carta_tipo
         if carta_tipo == CartaTipo.ARQUEIRO: 
             super().__init__(TokenTipo.PRAGA_ARQUEIROS)
         elif carta_tipo == CartaTipo.CAVALEIRO:
@@ -65,7 +79,15 @@ class Praga(Token):
             super().__init__(TokenTipo.PRAGA_ESPADACHIM)
         else:
             raise ValueError("Tipo da carta deve ser arqueito, cavaleiro ou espadachim. Tipo recebido é %s" %str(carta_tipo))
-        self.__carta_tipo: CartaTipo = carta_tipo
 
     def invocar(self, mesa: Mesa.Mesa):
         mesa.descartar_todas(self.__carta_tipo)
+
+    def load_image(self): # -> Image
+        if self.__carta_tipo == CartaTipo.ARQUEIRO: 
+            return Image.open("Images/base/T_plague_archer.png")
+        elif self.__carta_tipo == CartaTipo.CAVALEIRO:
+            return Image.open("Images/base/T_plague_knight.png")
+        elif self.__carta_tipo == CartaTipo.ESPADACHIM:
+            return Image.open("Images/base/T_plague_swordman.png")
+        
