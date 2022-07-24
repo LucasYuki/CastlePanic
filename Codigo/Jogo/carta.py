@@ -31,7 +31,7 @@ class Carta(ABC):
 
     @abstractmethod
     def ativar(self, jogador: Jogador) -> None:
-        pass
+        pass #ABC
 
 class Perdido(Carta):
     def __init__(self):

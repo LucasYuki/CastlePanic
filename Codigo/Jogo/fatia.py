@@ -36,10 +36,6 @@ class Fatia:
     def get_posicao(self, anel: AnelTipo) -> Posicao:
         return self.__aneis[anel]
 
-    # NAO USADO
-    def novo_monstro(self, monstro: Monstro) -> None:
-        pass
-
     def pedra_entrando(self) -> bool:
         for anel, posicao in self.__aneis.items():
             if anel != AnelTipo.CASTELO: # A posicao nao eh a do castelo

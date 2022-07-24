@@ -64,7 +64,7 @@ class Especial(Monstro, ABC):
 
     @abstractmethod
     def efeito(self, mesa: Mesa) -> None:
-        pass
+        pass #ABC
 
 class Rei(Especial):
     def __init__(self) -> None:

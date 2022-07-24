@@ -64,7 +64,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
         print(a_move)
 
     def receive_withdrawal_notification(self):
-        pass
+        pass #???
     
     @property
     def jogadores(self):

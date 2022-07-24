@@ -23,7 +23,7 @@ class Acao(Carta, ABC):
     @abstractmethod
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao.Posicao = None, 
             monstro: Monstro.Monstro = None) -> None:
-        pass
+        pass #ABC
 
 class Reciclar(Acao):
     def __init__(self):

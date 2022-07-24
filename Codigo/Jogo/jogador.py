@@ -53,7 +53,7 @@ class Jogador():
         return carta in self.__mao
 
     def propor_troca(self) -> None:
-        pass
+        pass #TROCA
 
     def descartar(self, carta: Carta) -> bool:
         if not carta in self.__mao:

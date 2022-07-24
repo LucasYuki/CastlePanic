@@ -179,23 +179,28 @@ class Mesa():
 
     # NAO USADO
     def set_turno(self, jogador: Jogador) -> None:
-        pass
+        pass #???
 
     def passar_jogada(self, jogador_passante: Jogador) -> bool:
         # Guarda
         if jogador_passante != self.__jogador_no_controle:
             return False
         
+        fim = False
+
         self.__tabuleiro.mover_montros()
         self.__tabuleiro.criar_tokens()
         destruidas = self.__tabuleiro.verificar_torres_destruidas()
 
         if destruidas:
             self.declarar_derrota()
+            return True
+        
         else:
             haMonstros = self.__tabuleiro.haMonstros()
             if not haMonstros:
                 self.declarar_vitoria()
+                return True
             else:
                 self.proximo_jogador()
                 self.__jogador_no_controle.comprar_mao()
@@ -266,13 +271,13 @@ class Mesa():
         self.__fase = "troca"
 
     def resposta_troca(self, jogador_troca: Jogador, resposta: bool) -> bool:
-        pass
+        pass #TROCA
 
     def declarar_vitoria(self) -> None:
-        pass
+        self.__fase = "vitoria"
 
     def declarar_derrota(self) -> None:
-        pass
+        self.__fase = "derrota"
 
     def proximo_jogador(self) -> None:
         atual = self.__jogador_no_controle

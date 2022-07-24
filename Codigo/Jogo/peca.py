@@ -5,9 +5,8 @@ from PIL import Image
 from abc import ABC, abstractmethod
 
 from .enums import ContrucaoTipo
-if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
-    # from Jogo import Jogador
-    pass
+# if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
+#     # from Jogo import Jogador
     
 class Peca(ABC):
     __imagem : Image
@@ -23,7 +22,7 @@ class Peca(ABC):
 
     @abstractmethod
     def load_image(self):# -> Image
-        pass
+        pass #ABC
 
 class Construcao(Peca):
     _prioridade: int

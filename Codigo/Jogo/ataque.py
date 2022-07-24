@@ -22,10 +22,7 @@ class Ataque(Acao, ABC):
 
     @abstractmethod
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
-        pass
-
-    def aplicar_ataque(self, monstro: Monstro) -> None:
-        pass
+        pass #ABC
 
     def verificar_alcance(self, pos: Posicao) -> bool:
         return pos.anel in self.__anel and (pos.fatia == self.__cor or self.__cor == FatiaCor.TODAS) 

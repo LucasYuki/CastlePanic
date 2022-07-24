@@ -18,11 +18,11 @@ class Token(Peca):
         
     @abstractmethod
     def load_image(self): # -> Image
-        pass
+        pass #ABC
 
     @abstractmethod
     def invocar(self, mesa: Mesa):
-        pass
+        pass #ABC
 
     def get_tipo(self) -> TokenTipo:
         return self.__tipo
