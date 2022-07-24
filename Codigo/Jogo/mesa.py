@@ -68,9 +68,6 @@ class Mesa():
         np.random.permutation(monstros_iniciais)
         for fatia, monstro_inicial in enumerate(monstros_iniciais):
             self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.CASTELO, fatia)
-
-        # Inicializa Jogadores
-        self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info) for info in jogadores}
         
         # Inicializa Cartas
         """
@@ -90,6 +87,9 @@ class Mesa():
                 self.__jogadores[idx].colocar_na_mao(Comprar())
             y += 1
         """
+    
+        # Inicializa Jogadores
+        self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info) for info in jogadores}
     
     @property
     def jogadores(self):
