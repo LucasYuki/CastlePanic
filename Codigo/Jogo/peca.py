@@ -10,14 +10,16 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     pass
     
 class Peca(ABC):
-    __imagem: Image
+    __imagem : Image
 
     def __init__(self):
         super().__init__()
-        __imagem = self.load_image() 
+        self.__imagem = self.load_image() 
+        if not self.__imagem:
+            raise ValueError("Imagem não carregada.")
 
     def get_image(self):# -> Image
-        return __imagem
+        return self.__imagem
 
     @abstractmethod
     def load_image(self):# -> Image

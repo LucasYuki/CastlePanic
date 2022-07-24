@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from PIL import Image
 from random import randrange
 from abc import ABC, abstractmethod
 
@@ -40,6 +41,14 @@ class Monstro(Token):
     def curar(self) -> None:
         if self.__vida < self._vida_max:
             self.__vida += 1
+    
+    def load_image(self):
+        if self.get_tipo() == TokenTipo.GOBLIN:
+            return Image.open("Images/base/TM_goblin.png")
+        elif self.get_tipo() == TokenTipo.ORC:
+            return Image.open("Images/base/TM_orc.png")
+        elif self.get_tipo() == TokenTipo.TROLL:
+            return Image.open("Images/base/TM_troll.png")
 
 class Especial(Monstro, ABC):
     def __init__(self, vida_max: int, tipo: TokenTipo) -> None:
@@ -63,6 +72,9 @@ class Rei(Especial):
         for _ in range(3):
             tabuleiro.novo_token()
 
+    def load_image(self):
+        return Image.open("Images/base/TME_goblin_king.png")
+    
 class Mago(Especial):
     def __init__(self) -> None:
         super().__init__(vida_max=2, tipo=TokenTipo.MAGO)
@@ -70,9 +82,15 @@ class Mago(Especial):
     def efeito(self, mesa: Mesa) -> None:
         mesa.get_tabuleiro().mover_montros()
 
+    def load_image(self):
+        return Image.open("Images/base/TME_troll_mage.png")
+    
 class Medico(Especial):
     def __init__(self) -> None:
         super().__init__(vida_max=3, tipo=TokenTipo.MEDICO)
 
     def efeito(self, mesa: Mesa) -> None:
         mesa.get_tabuleiro().curar_todos()
+
+    def load_image(self):
+        return Image.open("Images/base/TME_healer.png")
