@@ -21,7 +21,7 @@ class Tabuleiro:
             self.__fatias[-1].colocar_peca(Muro(), AnelTipo.CASTELO)
             
     def colocar_peca(self, peca: Peca, anel: AnelTipo, fatia: int) -> None:
-        self.__fatias[fatia].colocar_peca(peca, anel)
+        self.get_fatia(fatia).colocar_peca(peca, anel)
 
     def verificar_torres_destruidas(self) -> bool:
         for fatia in self.__fatias:

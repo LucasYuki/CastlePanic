@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from .peca import Fortificacao, Torre, Muro, Construcao
 from .monstro import Monstro
-from .enums import ContrucaoTipo
+from .enums import ContrucaoTipo, FatiaCor
 
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
     from Jogo import Peca
@@ -16,6 +16,13 @@ class Posicao:
         self.__pecas: list[Peca] = []
         self.__fatia: int = fatia
         self.__anel: AnelTipo = anel
+
+    def __str__(self):
+        return "anel: %s | fatia: %s" %(str(self.__anel), str(self.__fatia))
+
+    @property
+    def cor(self):
+        return FatiaCor.num2cor(self.__fatia)
 
     @property
     def fatia(self):

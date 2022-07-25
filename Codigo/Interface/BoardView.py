@@ -85,8 +85,8 @@ class BoardView(Canvas):
                     self.coords(self.__peca_idx[peca], (int(x), int(y)))
             if fortificacao is not None:
                 angle = initial_angle + 30
-                x = self.__current_width/2 + np.sin(angle*np.pi/180)*radius*1.1 - size[0]/2
-                y = self.__current_height/2 + np.cos(angle*np.pi/180)*radius*1.1 - size[1]/2
+                x = self.__current_width/2 + np.sin(angle*np.pi/180)*radius*2 - size[0]/2
+                y = self.__current_height/2 + np.cos(angle*np.pi/180)*radius*2 - size[1]/2
                 self.coords(self.__peca_idx[fortificacao], (int(x), int(y)))
 
     def __on_click(self, event, peca: Peca):

@@ -85,7 +85,7 @@ class PlayerInterface(Tk):
     
     def selecionar_posicao(self, posicao: Posicao):
         print("Interface selecionar_posicao")
-        if self.__jogo.selecionar_posicao(self, posicao):
+        if self.__jogo.selecionar_posicao(posicao):
             self.update()
     
     def passar_jogada(self):

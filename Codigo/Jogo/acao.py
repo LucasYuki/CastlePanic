@@ -55,9 +55,9 @@ class ReparoMuro(Acao):
 
     def ativar(self, jogador: Jogador) -> None:
         efeitos = map(lambda carta: carta.tipo ,jogador.get_cartas_efeitos_pendentes())
-        if self.__tipo == CartaTipo.MORTAR and CartaTipo.TIJOLO in efeitos:
+        if self.tipo == CartaTipo.MORTAR and CartaTipo.TIJOLO in efeitos:
             jogador.set_acao_pendente(self)
-        elif self.__tipo == CartaTipo.TIJOLO and CartaTipo.MORTAR in efeitos:
+        elif self.tipo == CartaTipo.TIJOLO and CartaTipo.MORTAR in efeitos:
             jogador.set_acao_pendente(self)
         else:
             jogador.add_carta_efeito_pendente(self)
@@ -66,7 +66,7 @@ class ReparoMuro(Acao):
         muro = Muro()
         jogador.mesa.colocar_peca(muro, pos.anel, pos.fatia)
         efeitos = jogador.get_cartas_efeitos_pendentes()
-        tipo_oposto = CartaTipo.TIJOLO if self.__tipo == CartaTipo.MORTAR else CartaTipo.MORTAR
+        tipo_oposto = CartaTipo.TIJOLO if self.tipo == CartaTipo.MORTAR else CartaTipo.MORTAR
         carta_oposta = list(filter(lambda x: x.tipo == tipo_oposto, efeitos))
         jogador.remove_efeito_pendente(carta_oposta[0])
         jogador.remove_acao_pendente()

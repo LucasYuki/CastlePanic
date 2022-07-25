@@ -10,7 +10,7 @@ from .tabuleiro import Tabuleiro
 from .jogador import Jogador
 
 # cartas 
-from .ataque import Dano, Empurrao, Pixe, Barbaro
+from .ataque import Dano, Empurrao, Pixe, Barbaro, Ataque
 from .carta import Perdido, Comprar, BoaMira
 from .acao import Acao, Reciclar, Fortificar, ReparoMuro
 
@@ -201,10 +201,6 @@ class Mesa():
     def get_tabuleiro(self) -> Tabuleiro:
         return self.__tabuleiro
 
-    # NAO USADO
-    def set_turno(self, jogador: Jogador) -> None:
-        pass #???
-
     def passar_jogada(self, jogador_passante: Jogador) -> bool:
         # Guarda
         if jogador_passante != self.__jogador_no_controle:
@@ -232,6 +228,7 @@ class Mesa():
 
         self.__tokens_bloqueados = False
         self.__fase = FaseTipo.INICIO
+        self.__turno += 1
         return True
 
 
@@ -259,8 +256,10 @@ class Mesa():
 
     def selecionar_monstro(self, monstro: Monstro, pos: Posicao, jogador: Jogador) -> bool:
         acao: Acao = jogador.get_acao_pendente()
+        print("acao: ", str(acao))
         if isinstance(acao, Ataque):
             alcanca: bool = acao.verificar_alcance(pos)
+            print("alcanca: ", alcanca)
             if alcanca:
                 acao.agir(None, jogador, pos, monstro)
                 return True
@@ -268,10 +267,10 @@ class Mesa():
 
     def selecionar_posicao(self, pos: Posicao, jogador: Jogador) -> bool:
         acao: Acao = jogador.get_acao_pendente()
-        if isinstance(acao, Fortificar) and pos.ha_construcao() and not pos.ha_fortificacao():
+        if isinstance(acao, Fortificar) and pos.ha_muro() and not pos.ha_fortificacao():
             acao.agir(None, jogador, pos, None)
             return True
-        elif isinstance(acao, ReparoMuro) and not pos.ha_construcao():
+        elif isinstance(acao, ReparoMuro) and not pos.ha_muro():
             acao.agir(None, jogador, pos, None)
             return True
         return False

@@ -54,12 +54,12 @@ class LayoutGame(ttk.Frame):
         self.__fatias_buttons_frame.rowconfigure(0, weight=1)
         fatia_lbl = Label(self.__fatias_buttons_frame, text="Posição castelo da fatia:")
         fatia_lbl.grid(column=0, row=0, sticky=(N, W, E, S))
-        self.__fatias_buttons_frame.columnconfigure(0, weight=5)
+        self.__fatias_buttons_frame.columnconfigure(0, weight=9)
         fatia_btn = {}
         for i in range(1, 7):
             fatia_btn[i] = ttk.Button(self.__fatias_buttons_frame, 
                                              text=str(i), 
-                                             command=lambda f=i: self.passar(f))
+                                             command=lambda f=i: self.selecionar_posicao(f))
             fatia_btn[i].grid(column=i, row=0, sticky=(N, W, E, S))
             self.__fatias_buttons_frame.columnconfigure(i, weight=1)
 
@@ -133,7 +133,9 @@ class LayoutGame(ttk.Frame):
 
     def selecionar_posicao(self, fatia: int):
         self.set_info("Fatia %i selecionado" %fatia)
-        self.__interface.selecionar_posicao(Posicao(fatia, AnelTipo.CASTELO))               
+        pos = self.__jogo.get_tabuleiro().get_fatia(fatia).get_posicao(AnelTipo.CASTELO)
+        print(pos)
+        self.__interface.selecionar_posicao(pos)               
 
     def passar(self):
         self.set_info("Passar")

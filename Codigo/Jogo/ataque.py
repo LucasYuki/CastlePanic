@@ -20,12 +20,15 @@ class Ataque(Acao, ABC):
         self.__anel: set[AnelTipo] = aneis
         self.__cor: FatiaCor = cores
 
+    def __str__(self):
+        return "tipo: %s | anel: %s | cor: %s" %(str(self.tipo), str(self.__anel), str(self.__cor))
+
     @abstractmethod
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         pass #ABC
 
     def verificar_alcance(self, pos: Posicao) -> bool:
-        return pos.anel in self.__anel and (pos.fatia == self.__cor or self.__cor == FatiaCor.TODAS) 
+        return pos.anel in self.__anel and (pos.cor == self.__cor or self.__cor == FatiaCor.TODAS) 
 
 class Dano(Ataque):
     def __init__(self, tipo: CartaTipo, cor: FatiaCor):
@@ -86,10 +89,11 @@ class Dano(Ataque):
     
     def agir(self, carta: Carta = None, jogador: Jogador = None, pos: Posicao = None, monstro: Monstro = None) -> None:
         efeitos_pendentes: set = jogador.get_cartas_efeitos_pendentes()
-        boa_mira = list(filter(type(BoaMira), efeitos_pendentes))
+        boa_mira = list(filter(lambda c: isinstance(c, BoaMira), efeitos_pendentes))
         if boa_mira != []:
-            boa_mira = boa_mira[0] #Nao tenho certeza se da pra ter duas boas miras, se so da 1 fica mais facil
+            boa_mira = boa_mira[0] 
             jogador.remove_efeito_pendente(boa_mira)
+            pos.remover_monstro(monstro)
         else:
             morto = monstro.danificar()
             if morto:

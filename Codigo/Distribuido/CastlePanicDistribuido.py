@@ -43,10 +43,6 @@ class CastlePanicDistribuido(DogPlayerInterface):
             self.__conected = False
         return code, message
 
-    @property
-    def conected(self):
-        return self.__conected
-
     def receive_start(self, start_status: StartStatus):
         players = start_status.get_players()
         idx = start_status.get_local_id()
@@ -64,19 +60,24 @@ class CastlePanicDistribuido(DogPlayerInterface):
 
     def receive_move(self, a_move: dict):
         tipo = a_move["Action"]
-        carta = None
         player = self.__jogo.jogadores[a_move["player"]]
         if tipo == AcaoJogadorTipo.DESCARTAR:
+            carta = player.get_carta_from_id(a_move["carta_idx"])
             sucesso = self.__jogo.descartar_comprar(carta, player)
         elif tipo == AcaoJogadorTipo.JOGAR:
             carta = player.get_carta_from_id(a_move["carta_idx"])
             sucesso = self.__jogo.jogar_carta(carta, player)
         elif tipo == AcaoJogadorTipo.SELECIONAR_DESCARTE:
+            carta = player.get_carta_from_id(a_move["carta_idx"])
             sucesso = self.__jogo.selecionar_carta_descarte(carta, player)
         elif tipo == AcaoJogadorTipo.SELECIONAR_MONSTRO:
-            sucesso = self.__jogo.selecionar_monstro(carta, player)
+            posicao = self.__jogo.get_tabuleiro().get_fatia(a_move["posicao"]["fatia"]).get_posicao(a_move["posicao"]["anel"])
+            print(posicao)
+            monstro = posicao.get_peca_from_id(a_move["monstro_idx"])
+            sucesso = self.__jogo.selecionar_monstro(monstro, posicao, player)
         elif tipo == AcaoJogadorTipo.SELECIONAR_POSICAO:
-            sucesso = self.__jogo.selecionar_posicao(carta, player)
+            posicao = self.__jogo.get_tabuleiro().get_fatia(a_move["posicao"]["fatia"]).get_posicao(a_move["posicao"]["anel"])
+            sucesso = self.__jogo.selecionar_posicao(posicao, player)
         elif tipo == AcaoJogadorTipo.PASSAR:
             sucesso = self.__jogo.passar_jogada(player)
             
@@ -134,6 +135,8 @@ class CastlePanicDistribuido(DogPlayerInterface):
                      "monstro_idx": posicao.get_peca_id(monstro)}
         
         sucesso = self.__jogo.selecionar_monstro(monstro, posicao, self.__local_player)
+        print(posicao)
+        print(move_info)
         print("CastlePanicDistribuido selecionar_monstro", sucesso)
         if sucesso:
             self.__gui.update()
