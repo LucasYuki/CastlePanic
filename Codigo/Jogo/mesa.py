@@ -122,12 +122,13 @@ class Mesa():
         self.__pilha_cartas.append(BoaMira())
         # 1 Fortify Wall
         self.__pilha_cartas.append(Fortificar())
-        # 1 Scavenge
-        self.__pilha_cartas.append(Reciclar())
         # 1 Brick
         self.__pilha_cartas.append(ReparoMuro(CartaTipo.TIJOLO))
         # 1 Mortar
         self.__pilha_cartas.append(ReparoMuro(CartaTipo.MORTAR))
+        
+        self.__pilha_cartas = list(np.random.permutation(self.__pilha_cartas))
+        
         
         # Inicializa Jogadores
         self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info, mesa=self) for info in jogadores}
@@ -136,12 +137,8 @@ class Mesa():
         self.__ordem_jogadores.sort(key=lambda x: x.ordem)
         self.__jogador_no_controle = self.__ordem_jogadores[0]
         
-        while len(self.__pilha_cartas) != 0:
-            self.__ordem_jogadores[0].comprar_carta()
-            
-        # 1 Draw 2 Cards
-        self.__pilha_cartas.append(Comprar())
-        self.__ordem_jogadores[1].comprar_carta()
+        for jogador in self.__jogadores.values():
+            jogador.comprar_mao()
         
         
         """
@@ -191,7 +188,13 @@ class Mesa():
         self.__pilha_descarte.append(carta)
 
     def get_num_cartas(self) -> int:
-        return len(self.__pilha_cartas)
+        n_jogadores = len(self.__jogadores)
+        if n_jogadores == 2:
+            return 6
+        elif n_jogadores <= 5:
+            return 5
+        else:
+            return 4
 
     def get_turn(self) -> int:
         return self.__turno
@@ -230,11 +233,11 @@ class Mesa():
         return True
 
 
-    def descartar_compra(self, carta: Carta, jogador: Jogador) -> bool:
+    def descartar_comprar(self, carta: Carta, jogador: Jogador) -> bool:
         if not jogador is self.__jogador_no_controle:
             return False
 
-        if self.__fase > FaseTipo.DESCARTE:
+        if self.__fase < FaseTipo.DESCARTE:
             return False
         
         self.__fase = FaseTipo.DESCARTE
