@@ -18,13 +18,10 @@ class Jogador():
     def __init__(self, nome: str, idx: str, ordem: str, mesa: Mesa):
         self.__mao: list[Carta] = []
         
-        # Nao ta no diagrama de classes
         self.__idx = idx
         self.__nome = nome
         self.__ordem = int(ordem)
-        # Fim
-
-        self.__pontos: int  = None
+        
         self.__mesa: Mesa = mesa
         self.__acao_pendente: Acao = None #Mudar Carta para Acao
         self.__carta_efeito_pendente: set[Carta] = set()

@@ -14,10 +14,6 @@ class Carta(ABC):
         self.__tipo: CartaTipo = tipo
     
     @property
-    def idx(self):
-        return self.__idx
-    
-    @property
     def imagem(self):
         return self.__imagem
     
