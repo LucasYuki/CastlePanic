@@ -3,7 +3,7 @@ from tkinter import ttk
 from PIL import ImageTk, Image, ImageDraw
 import Interface
 from Distribuido import CastlePanicDistribuido
-from Jogo import FaseTipo
+from Jogo import FaseTipo, Monstro, Posicao, AnelTipo
 
 class LayoutGame(ttk.Frame):
     __slots__ = ("__board", "__info", "__hands", "__hand_notebook", "__buttons",
@@ -49,6 +49,19 @@ class LayoutGame(ttk.Frame):
         self.__passar_btn.grid(column=3, row=0, sticky=(N, W, E, S))
         self.__buttons.columnconfigure(3, weight=1)
         self.__buttons_showing[self.__passar_btn] = True
+                   
+        self.__fatias_buttons_frame = ttk.Frame(self)
+        self.__fatias_buttons_frame.rowconfigure(0, weight=1)
+        fatia_lbl = Label(self.__fatias_buttons_frame, text="Posição castelo da fatia:")
+        fatia_lbl.grid(column=0, row=0, sticky=(N, W, E, S))
+        self.__fatias_buttons_frame.columnconfigure(0, weight=5)
+        fatia_btn = {}
+        for i in range(1, 7):
+            fatia_btn[i] = ttk.Button(self.__fatias_buttons_frame, 
+                                             text=str(i), 
+                                             command=lambda f=i: self.passar(f))
+            fatia_btn[i].grid(column=i, row=0, sticky=(N, W, E, S))
+            self.__fatias_buttons_frame.columnconfigure(i, weight=1)
 
     def __on_resize(self, event):
         #   Calcula a posição de cada uma das partes do layout quando o tamanho 
@@ -79,7 +92,14 @@ class LayoutGame(ttk.Frame):
             x=self.__padding, 
             y=self.__padding, 
             width=remaining_width,
-            height=info_height)
+            height=info_height-self.__buttons_height-self.__padding)
+        
+        self.__fatias_buttons_frame.place(
+            in_=self,
+            x=self.__padding,
+            y=self.__padding+info_height-self.__buttons_height, 
+            width=remaining_width,
+            height=self.__buttons_height)
 
         self.__hand_notebook.place(
             in_=self, 
@@ -106,6 +126,14 @@ class LayoutGame(ttk.Frame):
         carta = self.__hands[self.__jogo.get_mesa().jogador_no_controle.idx].selected
         if carta is not None:
             self.__interface.jogar_carta(carta)
+        
+    def selecionar_monstro(self, monstro: Monstro, posicao: Posicao):
+        self.set_info("Monstro %s selecionado" %str(monstro))
+        self.__interface.selecionar_monstro(monstro, posicao) 
+
+    def selecionar_posicao(self, fatia: int):
+        self.set_info("Fatia %i selecionado" %fatia)
+        self.__interface.selecionar_posicao(Posicao(fatia, AnelTipo.CASTELO))               
 
     def passar(self):
         self.set_info("Passar")
@@ -139,12 +167,12 @@ class LayoutGame(ttk.Frame):
             self.show_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
         elif fase == FaseTipo.DESCARTE:
-            self.hide_button(self.__descartar_btn)
+            self.show_button(self.__descartar_btn)
             self.show_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
         elif fase == FaseTipo.JOGADA:
             self.hide_button(self.__descartar_btn)
-            self.hide_button(self.__jogar_btn)
+            self.show_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
         elif fase == FaseTipo.VITORIA:
             self.hide_button(self.__descartar_btn)

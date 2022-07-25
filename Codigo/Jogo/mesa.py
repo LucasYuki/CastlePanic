@@ -134,16 +134,17 @@ class Mesa():
         # Inicializa Jogadores
         self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info, mesa=self) for info in jogadores}
         
-        while len(self.__pilha_cartas) != 0:
-            self.__jogadores[jogadores[0][1]].comprar_carta()
-            
-        # 1 Draw 2 Cards
-        self.__pilha_cartas.append(Comprar())
-        self.__jogadores[jogadores[1][1]].comprar_carta()
-        
         self.__ordem_jogadores = list(self.__jogadores.values())
         self.__ordem_jogadores.sort(key=lambda x: x.ordem)
         self.__jogador_no_controle = self.__ordem_jogadores[0]
+        
+        while len(self.__pilha_cartas) != 0:
+            self.__ordem_jogadores[0].comprar_carta()
+            
+        # 1 Draw 2 Cards
+        self.__pilha_cartas.append(Comprar())
+        self.__ordem_jogadores[1].comprar_carta()
+        
         
         """
         # Inicialização das imagens das cartas
