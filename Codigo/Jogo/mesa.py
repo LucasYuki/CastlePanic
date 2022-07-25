@@ -32,10 +32,8 @@ class Mesa():
         self.__fase: str = FaseTipo.INICIO
         self.__jogador_no_controle: Jogador = None
         self.__tokens_bloqueados: bool = False
-        self.__subestado: str = False
         
         self.__tabuleiro = Tabuleiro()
-        self.__descarte_tokens: list[Token] = []
         self.__pilha_cartas: list[Carta] = []
         self.__pilha_descarte: list[Carta] = []
         self.__saco_tokens: list[Token] = []
@@ -200,10 +198,6 @@ class Mesa():
 
     def get_tabuleiro(self) -> Tabuleiro:
         return self.__tabuleiro
-
-    # NAO USADO
-    def set_turno(self, jogador: Jogador) -> None:
-        pass #???
 
     def passar_jogada(self, jogador_passante: Jogador) -> bool:
         # Guarda

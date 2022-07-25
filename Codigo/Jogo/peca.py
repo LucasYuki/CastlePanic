@@ -30,7 +30,7 @@ class Construcao(Peca):
     
     def __init__(self):
         super().__init__()
-        self.__prioridade: int = None
+        self._prioridade: int = None
 
     @property
     def prioridade(self) -> int:
