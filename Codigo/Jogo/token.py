@@ -63,7 +63,7 @@ class Pedra(Token):
         super().__init__(TokenTipo.PEDRA)
 
     def invocar(self, mesa: Mesa.Mesa):
-        fatia = mesa.get_tabuleiro().get_fatia(np.random([0,1,2,3,4,5]))
+        fatia = mesa.get_tabuleiro().get_fatia(np.random.randint(6))
         mesa.get_tabuleiro().pedra(fatia)
     
     def load_image(self): # -> Image

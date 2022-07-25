@@ -75,7 +75,7 @@ class Mesa():
         
         np.random.seed(seed)
         self.__saco_tokens = list(np.random.permutation(self.__saco_tokens))
-        np.random.permutation(monstros_iniciais)
+        monstros_iniciais = list(np.random.permutation(monstros_iniciais))
         for fatia, monstro_inicial in enumerate(monstros_iniciais):
             self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.FLORESTA, fatia)
         
@@ -181,6 +181,11 @@ class Mesa():
         return self.__fase
 
     def get_carta_compra(self) -> Carta:
+        if len(self.__pilha_cartas) == 0:
+            self.__pilha_cartas = list(np.random.permutation(self.__pilha_descarte))
+            self.__pilha_descarte = []
+            if len(self.__pilha_cartas) == 0:
+                return None
         return self.__pilha_cartas.pop()
 
     def put_descarte(self, carta: Carta) -> None:

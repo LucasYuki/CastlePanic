@@ -63,7 +63,7 @@ class Jogador():
     def descartar_aleatoria(self) -> None:
         if self.__mao == []:
             return
-        self.__mao.pop(randrange(np.random([n for n in range(len(self.__mao))])))
+        self.__mao.pop(np.random.randint(len(self.__mao)))
         
     def descartar_todas(self, carta_tipo: CartaTipo) -> None:
         self.__mao = list(filter(lambda x: x.tipo != carta_tipo, self.__mao))

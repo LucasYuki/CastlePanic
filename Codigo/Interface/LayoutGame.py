@@ -142,18 +142,20 @@ class LayoutGame(ttk.Frame):
             self.hide_button(self.__descartar_btn)
             self.show_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
-        elif fase == FaseTipo.TROCA:
-            self.hide_button(self.__descartar_btn)
-            self.show_button(self.__jogar_btn)
-            self.show_button(self.__passar_btn)
         elif fase == FaseTipo.JOGADA:
             self.hide_button(self.__descartar_btn)
             self.hide_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
         elif fase == FaseTipo.VITORIA:
-            pass
+            self.hide_button(self.__descartar_btn)
+            self.hide_button(self.__jogar_btn)
+            self.hide_button(self.__passar_btn)
+            self.set_info("VITORIA")
         elif fase == FaseTipo.DERROTA:
-            pass
+            self.hide_button(self.__descartar_btn)
+            self.hide_button(self.__jogar_btn)
+            self.hide_button(self.__passar_btn)
+            self.set_info("DERROTA")
         
         self.__hand_notebook.select(self.__hands[self.__jogo.get_mesa().jogador_no_controle.idx])
         self.__board.update()

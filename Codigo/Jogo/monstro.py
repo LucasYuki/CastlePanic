@@ -26,7 +26,7 @@ class Monstro(Token):
         self.__ultimo_turno_imovel: int = -1
 
     def invocar(self, mesa: Mesa) -> None:
-        mesa.get_tabuleiro().colocar_peca(self, 0, np.random([0,1,2,3,4,5]))
+        mesa.get_tabuleiro().colocar_peca(self, 0, np.random.randint(6))
 
     def danificar(self) -> bool:
         self.__vida -= 1
@@ -73,7 +73,7 @@ class Rei(Especial):
     def efeito(self, mesa: Mesa) -> None:
         tabuleiro = mesa.get_tabuleiro()
         for _ in range(3):
-            tabuleiro.novo_token()
+            tabuleiro.novo_token(mesa)
 
     def load_image(self):
         return Image.open("Images/base/TME_goblin_king.png")
@@ -83,7 +83,7 @@ class Mago(Especial):
         super().__init__(vida_max=2, tipo=TokenTipo.MAGO)
 
     def efeito(self, mesa: Mesa) -> None:
-        mesa.get_tabuleiro().mover_montros()
+        mesa.get_tabuleiro().mover_montros(mesa)
 
     def load_image(self):
         return Image.open("Images/base/TME_troll_mage.png")

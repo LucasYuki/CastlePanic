@@ -53,9 +53,10 @@ class Posicao:
     def destruir_construcao(self) -> None:
         construcoes = list(filter(lambda p: isinstance(p, Construcao), self.__pecas))
         tipos = list(map(lambda x: x.tipo, construcoes))
-        for tipo in [ContrucaoTipo.FORTIFICACAO, ContrucaoTipo.TORRE, ContrucaoTipo.MURO]:
+        for tipo in [ContrucaoTipo.FORTIFICACAO, ContrucaoTipo.MURO, ContrucaoTipo.TORRE]:
             if tipo in tipos:
                 self.__pecas.remove(construcoes[tipos.index(tipo)])
+                return
 
     def get_anel_fatia(self) -> tuple:
         return (self.__anel, self.__fatia)

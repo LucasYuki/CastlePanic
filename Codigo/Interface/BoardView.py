@@ -101,7 +101,7 @@ class BoardView(Canvas):
         if isinstance(peca, Construcao):
             return (30+60*3 - posicao.fatia*60) % 360
         elif isinstance(peca, Monstro):
-            return (30+60*3 - posicao.fatia*60 + 180 - peca.vida_perdida()) % 360
+            return (30+60*3 - posicao.fatia*60 + 180 - peca.vida_perdida()*120) % 360
         else:
             raise ValueError("peca deve ser monstro ou construção")
             
