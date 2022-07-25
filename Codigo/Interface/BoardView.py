@@ -95,7 +95,6 @@ class BoardView(Canvas):
 
     @property
     def aspect_ratio(self):
-        print("__aspect_ratio =", self.__aspect_ratio)
         return self.__aspect_ratio
     
     @staticmethod
