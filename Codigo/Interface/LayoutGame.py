@@ -169,7 +169,7 @@ class LayoutGame(ttk.Frame):
             self.show_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
         elif fase == FaseTipo.DESCARTE:
-            self.show_button(self.__descartar_btn)
+            self.hide_button(self.__descartar_btn)
             self.show_button(self.__jogar_btn)
             self.show_button(self.__passar_btn)
         elif fase == FaseTipo.JOGADA:
