@@ -1,5 +1,5 @@
 from DOG import DogPlayerInterface, DogActor, StartStatus
-from Jogo import Mesa, FaseTipo
+from Jogo import Mesa, FaseTipo, AcaoJogadorTipo
 import time 
 
 class CastlePanicDistribuido(DogPlayerInterface):
@@ -62,6 +62,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
 
     def receive_move(self, a_move: dict):
         print(a_move)
+        gui.update()
 
     def receive_withdrawal_notification(self):
         pass #???
@@ -76,8 +77,38 @@ class CastlePanicDistribuido(DogPlayerInterface):
             return self.__jogo.jogadores
         else:
             return None
+        
+    def descartar_comprar(self, carta : Carta)):
+        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+            self.__gui.update()
+            self.send_move(AcaoJogadorTipo.DESCARTAR)
     
-    def send_move(self, action, match_status, **move_info):
+    def jogar_carta(self, carta : Carta)):
+        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+            self.__gui.update()
+            self.send_move(AcaoJogadorTipo.JOGAR, )
+        
+    def selecionar_carta_descarte(self, carta : Carta):
+        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+            self.__gui.update()
+            self.send_move(AcaoJogadorTipo.SELECIONAR_DESCARTE)
+    
+    def selecionar_monstro(self, monstro: Monstro):
+        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+            self.__gui.update()
+            self.send_move(AcaoJogadorTipo.SELECIONAR_MONSTRO)
+    
+    def selecionar_posicao(self, posicao: Posicao):
+        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+            self.__gui.update()
+            self.send_move(AcaoJogadorTipo.SELECIONAR_POSICAO)
+    
+    def passar_jogada(self):
+        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+            self.__gui.update()
+            self.send_move(AcaoJogadorTipo.PASSAR)
+    
+    def send_move(self, action: AcaoJogadorTipo, match_status, **move_info):
         move_info["Action"] = action
         move_info["match_status"] = "progress"
         self._dog_server_interface.send_move(move_info)
