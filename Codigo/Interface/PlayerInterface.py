@@ -24,7 +24,7 @@ class PlayerInterface(Tk):
         self.mainloop()
         
     def return_to_menu(self):
-        del CastlePanicDistribuido(self)
+        del self.__jogo
         self.__jogo = CastlePanicDistribuido(self)
         self.__frames["menu"].tkraise()
         del self.__frames["game"]
