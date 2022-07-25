@@ -22,6 +22,12 @@ class PlayerInterface(Tk):
         self.maximize_window()
 
         self.mainloop()
+        
+    def return_to_menu(self):
+        del CastlePanicDistribuido(self)
+        self.__jogo = CastlePanicDistribuido(self)
+        self.__frames["menu"].tkraise()
+        del self.__frames["game"]
 
     def __set_frame(self, frame_name: str):
         self.__frames[frame_name].tkraise()

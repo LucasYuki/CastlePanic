@@ -1,3 +1,3 @@
 from Interface import PlayerInterface
 
-jogo = PlayerInterface()
+PlayerInterface()

@@ -9,7 +9,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
         self.__jogo = None
         self.__conected = False
         self._dog_server_interface = DogActor()
-    
+        
     @staticmethod
     def concat_seed(name):
         return "/".join([str(time.time_ns()), name])
@@ -85,7 +85,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
             self.__gui.update()
 
     def receive_withdrawal_notification(self):
-        pass #???
+        self.gui.destroy()
     
     @property
     def conected(self):
