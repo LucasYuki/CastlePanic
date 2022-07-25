@@ -59,6 +59,9 @@ class PlayerInterface(Tk):
         self.__set_frame("game")
         print("Frame Trocado")
         self.__frames["game"].update()
+        
+    def update(self):
+        self.__frames["game"].update()
     
     def descartar_comprar(self, carta : Carta):
         print("Interface descartar_comprar")

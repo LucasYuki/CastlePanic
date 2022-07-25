@@ -62,8 +62,25 @@ class CastlePanicDistribuido(DogPlayerInterface):
         self.__local_player = self.__jogo.jogadores[self.__local_player_id]
 
     def receive_move(self, a_move: dict):
-        print(a_move)
-        gui.update()
+        tipo = a_move["Action"]
+        carta = None
+        player = self.__jogo.jogadores[a_move["player"]]
+        if tipo == AcaoJogadorTipo.DESCARTAR:
+            sucesso = self.__jogo.descartar_comprar(carta, player)
+        elif tipo == AcaoJogadorTipo.JOGAR:
+            carta = player.get_carta_from_id(a_move["carta_idx"])
+            sucesso = self.__jogo.jogar_carta(carta, player)
+        elif tipo == AcaoJogadorTipo.SELECIONAR_DESCARTE:
+            sucesso = self.__jogo.selecionar_carta_descarte(carta, player)
+        elif tipo == AcaoJogadorTipo.SELECIONAR_MONSTRO:
+            sucesso = self.__jogo.selecionar_monstro(carta, player)
+        elif tipo == AcaoJogadorTipo.SELECIONAR_POSICAO:
+            sucesso = self.__jogo.selecionar_posicao(carta, player)
+        elif tipo == AcaoJogadorTipo.PASSAR:
+            sucesso = self.__jogo.passar_jogada(player)
+            
+        if sucesso:
+            self.__gui.update()
 
     def receive_withdrawal_notification(self):
         pass #???

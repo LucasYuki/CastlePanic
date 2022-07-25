@@ -46,11 +46,14 @@ class Tabuleiro:
             origem, pecas = pecas_dict.popitem()
 
             monstros = list(filter(lambda p: isinstance(p, Monstro), pecas))
+            print(monstros)
             if monstros == []:
                 continue
 
             destino: Posicao = self.determinar_posicao_destino(origem)
+            print(destino.anel, destino.fatia)
             ha_construcao: bool = destino.ha_construcao()
+            print(ha_construcao)
             if not ha_construcao:
                 self.mover_monstros_para_destino(monstros, origem, destino, mesa)
             else:
@@ -80,9 +83,11 @@ class Tabuleiro:
 
     def mover_monstros_para_destino(self, monstros: list, origem: Posicao, destino: Posicao, mesa: Mesa) -> None:
         for monstro in monstros:
+            print(monstro)
             if not monstro.imovel(mesa.turno):
                 origem.remover_monstro(monstro)
                 destino.colocar_peca(monstro)
+                print(destino.pecas)
 
     def novo_token(self, mesa: Mesa) -> None:
         token = mesa.get_token()

@@ -74,7 +74,7 @@ class Mesa():
         self.__saco_tokens.append(ComprarTokens(4))
         
         np.random.seed(seed)
-        np.random.permutation(self.__saco_tokens)
+        self.__saco_tokens = list(np.random.permutation(self.__saco_tokens))
         np.random.permutation(monstros_iniciais)
         for fatia, monstro_inicial in enumerate(monstros_iniciais):
             self.__tabuleiro.colocar_peca(monstro_inicial, AnelTipo.FLORESTA, fatia)

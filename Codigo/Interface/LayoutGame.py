@@ -97,7 +97,9 @@ class LayoutGame(ttk.Frame):
 
     def descartar(self):
         self.set_info("Descartar")
-        self.__interface.descartar_comprar()
+        carta = self.__hands[self.__jogo.get_mesa().jogador_no_controle.idx].selected
+        if carta is not None:
+            self.__interface.descartar_comprar(carta)
 
     def jogar(self):
         self.set_info("Jogar")
