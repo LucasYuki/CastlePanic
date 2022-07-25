@@ -60,6 +60,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
 
     def receive_move(self, a_move: dict):
         tipo = a_move["Action"]
+        print(a_move)
         player = self.__jogo.jogadores[a_move["player"]]
         if tipo == AcaoJogadorTipo.DESCARTAR:
             carta = player.get_carta_from_id(a_move["carta_idx"])
@@ -85,7 +86,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
             self.__gui.update()
 
     def receive_withdrawal_notification(self):
-        self.gui.destroy()
+        self.__gui.return_to_menu()
     
     @property
     def conected(self):

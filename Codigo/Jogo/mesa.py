@@ -28,6 +28,8 @@ if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
 
 class Mesa():
     def __init__(self, jogadores, seed: int):    
+        np.random.seed(seed)
+        
         self.__turno: int = 0
         self.__fase: str = FaseTipo.INICIO
         self.__jogador_no_controle: Jogador = None
@@ -71,7 +73,6 @@ class Mesa():
         # 1 Draw 4 Monster Tokens
         self.__saco_tokens.append(ComprarTokens(4))
         
-        np.random.seed(seed)
         self.__saco_tokens = list(np.random.permutation(self.__saco_tokens))
         monstros_iniciais = list(np.random.permutation(monstros_iniciais))
         for fatia, monstro_inicial in enumerate(monstros_iniciais):
@@ -137,7 +138,7 @@ class Mesa():
         self.__ordem_jogadores.sort(key=lambda x: x.ordem)
         self.__jogador_no_controle = self.__ordem_jogadores[0]
         
-        for jogador in self.__jogadores.values():
+        for jogador in self.__ordem_jogadores:
             jogador.comprar_mao()
         
         
@@ -237,7 +238,7 @@ class Mesa():
         if not jogador is self.__jogador_no_controle:
             return False
 
-        if self.__fase < FaseTipo.DESCARTE:
+        if self.__fase > FaseTipo.DESCARTE:
             return False
         
         self.__fase = FaseTipo.DESCARTE
