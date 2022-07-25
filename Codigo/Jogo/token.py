@@ -37,10 +37,10 @@ class ComprarTokens(Token):
         else:
             raise ValueError("Número de tokens deve ser 3 ou 4. Valor recebido %s" %str(n_tokens))
 
-    def invocar(self, mesa: Mesa.Mesa):
+    def invocar(self, mesa: Mesa):
         tabuleiro = mesa.get_tabuleiro()
         for _ in range(self.__n_tokens):
-            tabuleiro.novo_token()
+            tabuleiro.novo_token(mesa)
     
     def load_image(self): # -> Image
         if self.__n_tokens == 3:
@@ -63,7 +63,7 @@ class Pedra(Token):
         super().__init__(TokenTipo.PEDRA)
 
     def invocar(self, mesa: Mesa.Mesa):
-        fatia: int = randrange(0,6)
+        fatia = mesa.get_tabuleiro().get_fatia(randrange(0,6))
         mesa.get_tabuleiro().pedra(fatia)
     
     def load_image(self): # -> Image

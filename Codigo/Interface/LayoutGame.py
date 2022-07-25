@@ -11,6 +11,7 @@ class LayoutGame(ttk.Frame):
 
     def __init__(self, interface, jogo: CastlePanicDistribuido, **kwargs):
         self.__jogo = jogo
+        self.__interface = interface
         super().__init__(interface, **kwargs)
         self.grid(column=0, row=0, sticky=(N, S, E, W))
         self.bind("<Configure>", self.__on_resize)
@@ -22,14 +23,12 @@ class LayoutGame(ttk.Frame):
         self.__info = Interface.InfoViewer(self, background="bisque")
 
         self.__hand_notebook = ttk.Notebook(self) 
-        self.__hands = []
-        for jogador in self.__jogo.jogadores.values():
+        self.__hands = {}
+        for idx, jogador in self.__jogo.jogadores.items():
             hand = Interface.HandViewer(self, background="bisque",
                                         jogador=jogador)
-            self.__hands.append(hand)
+            self.__hands[idx] = hand
             self.__hand_notebook.add(hand, text=jogador.nome + " (%s)" %jogador.ordem)
-        self.__current_player = 0
-        self.__hand_notebook.select(self.__hands[self.__current_player])
         
         # Inicialização dos Botões                
         self.__buttons = ttk.Frame(self)
@@ -97,20 +96,18 @@ class LayoutGame(ttk.Frame):
             height=self.__buttons_height)
 
     def descartar(self):
-        #self.__jogo.send_move("Descartar")
         self.set_info("Descartar")
+        self.__interface.descartar_comprar()
 
     def jogar(self):
-        #self.__jogo.send_move("Jogar")
         self.set_info("Jogar")
+        carta = self.__hands[self.__jogo.get_mesa().jogador_no_controle.idx].selected
+        if carta is not None:
+            self.__interface.jogar_carta(carta)
 
     def passar(self):
-        #self.__jogo.send_move("Passar")
         self.set_info("Passar")
-        #self.__hand_notebook.hide(self.__hands[self.__current_player])
-        #self.__current_player = (self.__current_player+1) % len(self.__hands)
-        #self.__hand_notebook.add(self.__hands[self.__current_player])
-        #self.__hand_notebook.select(self.__hands[self.__current_player])
+        self.__interface.passar_jogada()
 
     def hide_button(self, button):
         if self.__buttons_showing[button]:
@@ -156,6 +153,7 @@ class LayoutGame(ttk.Frame):
         elif fase == FaseTipo.DERROTA:
             pass
         
+        self.__hand_notebook.select(self.__hands[self.__jogo.get_mesa().jogador_no_controle.idx])
         self.__board.update()
-        for hand in self.__hands:
+        for hand in self.__hands.values():
             hand.update()

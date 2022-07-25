@@ -134,9 +134,17 @@ class Mesa():
         # Inicializa Jogadores
         self.__jogadores: dict[Jogador] = {info[1]: Jogador(*info, mesa=self) for info in jogadores}
         
-        while len(self.__pilha_cartas) is not 0:
+        while len(self.__pilha_cartas) != 0:
             self.__jogadores[jogadores[0][1]].comprar_carta()
             
+        # 1 Draw 2 Cards
+        self.__pilha_cartas.append(Comprar())
+        self.__jogadores[jogadores[1][1]].comprar_carta()
+        
+        self.__ordem_jogadores = list(self.__jogadores.values())
+        self.__ordem_jogadores.sort(key=lambda x: x.ordem)
+        self.__jogador_no_controle = self.__ordem_jogadores[0]
+        
         """
         # Inicialização das imagens das cartas
         orig_img = Image.open("Images/base/49Cartas.jpg")
@@ -154,7 +162,12 @@ class Mesa():
                 self.__jogadores[idx].colocar_na_mao(Comprar())
             y += 1
         """
-    
+    def get_carta_id(self, carta: Carta):
+        return self.__mao.index(carta)
+        
+    def get_carta_from_id(self, idx: int):
+        return self.__mao[idx]
+
     @property
     def jogadores(self):
         return self.__jogadores
@@ -194,8 +207,8 @@ class Mesa():
         self.__fase = FaseTipo.PASSAGEM
         fim = False
 
-        self.__tabuleiro.mover_montros()
-        self.__tabuleiro.criar_tokens()
+        self.__tabuleiro.mover_montros(self)
+        self.__tabuleiro.criar_tokens(self)
         destruidas = self.__tabuleiro.verificar_torres_destruidas()
 
         if destruidas:
@@ -277,11 +290,10 @@ class Mesa():
     def proximo_jogador(self) -> None:
         atual = self.__jogador_no_controle
         atual.encerra_turno()
-        jogadores = list(self.jogadores.values())
-        if jogadores[-1] == atual:
-            self.__jogador_no_controle = jogadores[0]
+        if self.__ordem_jogadores[-1] == atual:
+            self.__jogador_no_controle = self.__ordem_jogadores[0]
         else:
-            self.__jogador_no_controle = jogadores[jogadores.index(atual) + 1]
+            self.__jogador_no_controle = self.__ordem_jogadores[atual.ordem]
 
     def descartar_todas(self, carta_tipo: CartaTipo) -> None:
         for jogador in self.__jogadores:
@@ -301,3 +313,7 @@ class Mesa():
         if self.__tokens_bloqueados or not len(self.__saco_tokens):
             return None
         return self.__saco_tokens.pop()
+    
+    @property
+    def jogador_no_controle(self) -> Jogador:
+        return self.__jogador_no_controle

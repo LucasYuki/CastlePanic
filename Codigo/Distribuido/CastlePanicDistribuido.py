@@ -1,5 +1,5 @@
 from DOG import DogPlayerInterface, DogActor, StartStatus
-from Jogo import Mesa, FaseTipo, AcaoJogadorTipo
+from Jogo import Mesa, FaseTipo, AcaoJogadorTipo, Carta, Monstro, Posicao
 import time 
 
 class CastlePanicDistribuido(DogPlayerInterface):
@@ -59,6 +59,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
         players, seed = self.extract_seed(players)
         print(seed)
         self.__jogo = Mesa(players, seed=seed)
+        self.__local_player = self.__jogo.jogadores[self.__local_player_id]
 
     def receive_move(self, a_move: dict):
         print(a_move)
@@ -74,43 +75,73 @@ class CastlePanicDistribuido(DogPlayerInterface):
         else:
             return None
         
-    def descartar_comprar(self, carta : Carta)):
-        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
-            self.__gui.update()
-            self.send_move(AcaoJogadorTipo.DESCARTAR)
+    def descartar_comprar(self, carta : Carta):
+        sucesso = self.__jogo.descartar_comprar(carta, self.__local_player)
+        print("CastlePanicDistribuido descartar_comprar", sucesso)
+        if sucesso:
+            carta_idx = self.__jogo.jogadores[self.__local_player_id].get_carta_id(carta)
+            move_info = {"carta_idx": carta_pos}
+            self.send_move(AcaoJogadorTipo.DESCARTAR, "progress", move_info)
+        return sucesso
     
-    def jogar_carta(self, carta : Carta)):
-        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+    def jogar_carta(self, carta : Carta):
+        sucesso = self.__jogo.jogar_carta(carta, self.__local_player)
+        print("CastlePanicDistribuido jogar_carta", sucesso)
+        if sucesso:
             self.__gui.update()
-            self.send_move(AcaoJogadorTipo.JOGAR, )
+            carta_idx = self.__jogo.jogadores[self.__local_player_id].get_carta_id(carta)
+            move_info = {"carta_idx": carta_pos}
+            self.send_move(AcaoJogadorTipo.JOGAR, "progress", move_info)
+        return sucesso
         
     def selecionar_carta_descarte(self, carta : Carta):
-        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+        sucesso = self.__jogo.selecionar_carta_descarte(carta, self.__local_player)
+        print("CastlePanicDistribuido selecionar_carta_descarte", sucesso)
+        if sucesso:
             self.__gui.update()
-            self.send_move(AcaoJogadorTipo.SELECIONAR_DESCARTE)
+            carta_idx = self.__jogo.jogadores[self.__local_player_id].get_carta_id(carta)
+            move_info = {"carta_idx": carta_pos}
+            self.send_move(AcaoJogadorTipo.SELECIONAR_DESCARTE, "progress", move_info)
+        return sucesso
     
-    def selecionar_monstro(self, monstro: Monstro):
-        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+    def selecionar_monstro(self, monstro: Monstro, posicao: Posicao):
+        sucesso = self.__jogo.selecionar_monstro(carta, self.__local_player)
+        print("CastlePanicDistribuido selecionar_monstro", sucesso)
+        if sucesso:
             self.__gui.update()
-            self.send_move(AcaoJogadorTipo.SELECIONAR_MONSTRO)
+            move_info = {"posicao": posicao.get_info_dict(), 
+                         "monstro_idx": posicao.get_peca_id(monstro)}
+            self.send_move(AcaoJogadorTipo.SELECIONAR_MONSTRO, "progress", move_info)
+        return sucesso
     
     def selecionar_posicao(self, posicao: Posicao):
-        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+        sucesso = self.__jogo.selecionar_posicao(carta, self.__local_player)
+        print("CastlePanicDistribuido selecionar_posicao", sucesso)
+        if sucesso:
             self.__gui.update()
-            self.send_move(AcaoJogadorTipo.SELECIONAR_POSICAO)
+            move_info = {"posicao": posicao.get_info_dict()}
+            self.send_move(AcaoJogadorTipo.SELECIONAR_POSICAO, "progress", move_info)
+        return sucesso
     
     def passar_jogada(self):
-        if self.__jogo.descartar_comprar(carta, self.__local_player_id):
+        sucesso = self.__jogo.passar_jogada(self.__local_player)
+        print("CastlePanicDistribuido passar_jogada", sucesso)
+        if sucesso:
             self.__gui.update()
-            self.send_move(AcaoJogadorTipo.PASSAR)
+            self.send_move(AcaoJogadorTipo.PASSAR, "progress", {})
+        return sucesso
     
-    def send_move(self, action: AcaoJogadorTipo, match_status, **move_info):
+    def send_move(self, action: AcaoJogadorTipo, match_status, move_info: dict):
         move_info["Action"] = action
         move_info["match_status"] = "progress"
+        move_info["player"] = self.__local_player_id
         self._dog_server_interface.send_move(move_info)
     
     def get_tabuleiro(self):
         return self.__jogo.get_tabuleiro()
+    
+    def get_mesa(self):
+        return self.__jogo
     
     def get_fase(self) -> FaseTipo:
         return self.__jogo.fase

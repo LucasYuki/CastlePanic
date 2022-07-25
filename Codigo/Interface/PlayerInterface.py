@@ -3,6 +3,7 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 import Interface
 from Distribuido import CastlePanicDistribuido
+from Jogo import Carta, Monstro, Posicao
 
 class PlayerInterface(Tk):
     __slots__ = "__frames", "__jogo"
@@ -58,3 +59,33 @@ class PlayerInterface(Tk):
         self.__set_frame("game")
         print("Frame Trocado")
         self.__frames["game"].update()
+    
+    def descartar_comprar(self, carta : Carta):
+        print("Interface descartar_comprar")
+        if self.__jogo.descartar_comprar(carta):
+            self.update()
+    
+    def jogar_carta(self, carta : Carta):
+        print("Interface jogar_carta")
+        if self.__jogo.jogar_carta(carta):
+            self.update()
+
+    def selecionar_carta_descarte(self, carta : Carta):
+        print("Interface selecionar_carta_descarte")
+        if self.__jogo.selecionar_carta_descarte(carta):
+            self.update()
+    
+    def selecionar_monstro(self, monstro: Monstro, posicao: Posicao):
+        print("Interface selecionar_monstro")
+        if self.__jogo.selecionar_monstro(monstro, posicao):
+            self.update()
+    
+    def selecionar_posicao(self, posicao: Posicao):
+        print("Interface selecionar_posicao")
+        if self.__jogo.selecionar_posicao(self, posicao):
+            self.update()
+    
+    def passar_jogada(self):
+        print("Interface passar_jogada")
+        if self.__jogo.passar_jogada():
+            self.update()

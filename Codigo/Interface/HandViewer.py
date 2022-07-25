@@ -21,6 +21,7 @@ class HandViewer(Canvas):
         self.bind("<Configure>", self.__on_resize)
     
     def update(self):
+        self.__selected = None
         self.__player_hand = self.__jogador.get_mao()
 
         self.__cards_idx = {}
@@ -50,11 +51,16 @@ class HandViewer(Canvas):
         for i, carta in enumerate(self.__player_hand):
             self.__imgs[carta] = ImageHelper.get_tk_image(carta.imagem, *card_size)
             self.itemconfig(self.__cards_idx[carta], image=self.__imgs[carta]) 
-            self.coords(self.__cards_idx[carta], (self.__layout.padding+(i*space)//(n_cards-1),
+            self.coords(self.__cards_idx[carta], (self.__layout.padding+(i*space)//max(n_cards-1, 1),
                                           self.__layout.padding))
     
     def __on_hover(self, event, carta: Carta):
         self.__layout.zoom(carta.imagem)
 
     def __on_click(self, event, carta: Carta):
-        self.__layout.set_info("Click on card %i" %(self.__cards_idx[carta]))
+        self.__layout.set_info("Carta %s selecionada" %str(carta.tipo))
+        self.__selected = carta
+
+    @property
+    def selected(self):
+        return self.__selected

@@ -18,9 +18,9 @@ class Jogador():
         self.__mao: list[Carta] = []
         
         # Nao ta no diagrama de classes
-        self.idx = idx
-        self.nome = nome
-        self.ordem = ordem
+        self.__idx = idx
+        self.__nome = nome
+        self.__ordem = int(ordem)
         # Fim
 
         self.__pontos: int  = None
@@ -32,7 +32,6 @@ class Jogador():
     def mesa(self):
         return self.__mesa
     
-    # NAO MEXI NISSO
     def colocar_na_mao(self, carta: Carta):
         self.__mao.append(carta)
 
@@ -68,7 +67,6 @@ class Jogador():
             return
         self.__mao.pop(randrange(0, len(self.__mao)))
         
-
     def descartar_todas(self, carta_tipo: CartaTipo) -> None:
         self.__mao = list(filter(lambda x: x.tipo != carta_tipo, self.__mao))
 
@@ -98,3 +96,21 @@ class Jogador():
 
     def get_mao(self) -> None: #Mudar o returno aqui?
         return self.__mao
+
+    def get_carta_id(self, carta: Carta):
+        return self.__mao.index(carta)
+        
+    def get_carta_from_id(self, idx: int):
+        return self.__mao[idx]
+
+    @property
+    def idx(self) -> str:
+        return self.__idx
+    
+    @property
+    def nome(self) -> str:
+        return self.__nome
+    
+    @property
+    def ordem(self) -> int:
+        return self.__ordem

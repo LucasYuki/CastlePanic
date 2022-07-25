@@ -1,7 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from Jogo.peca import Fortificacao, Torre, Muro
+from .peca import Fortificacao, Torre, Muro, Construcao
+from .monstro import Monstro
 from .enums import ContrucaoTipo
 
 if TYPE_CHECKING:  # importa classes abaixo apenas para verificar tipos
@@ -71,3 +72,13 @@ class Posicao:
 
     def colocar_peca(self, peca: Peca) -> None:
         self.__pecas.append(peca)
+
+    def get_peca_id(self, monstro: Monstro):
+        return self.__pecas.index(monstro)
+        
+    def get_peca_from_id(self, idx: int):
+        return self.__pecas[idx]
+    
+    def get_info_dict(self):
+        return {"anel": self.__anel, "fatia": self.__fatia}
+    

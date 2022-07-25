@@ -63,7 +63,6 @@ class Fatia:
         for posicao in self.__aneis.values():
             posicao.remover_todos_monstros()
 
-
     def curar_todos(self) -> None:
         for posicao in self.__aneis.values():
             posicao.curar_todos()
