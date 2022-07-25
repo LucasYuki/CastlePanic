@@ -51,9 +51,6 @@ class Jogador():
     def possui_carta(self, carta: Carta) -> bool:
         return carta in self.__mao
 
-    def propor_troca(self) -> None:
-        pass #TROCA
-
     def descartar(self, carta: Carta) -> bool:
         if not carta in self.__mao:
             return False

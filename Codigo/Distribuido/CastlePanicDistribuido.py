@@ -69,6 +69,10 @@ class CastlePanicDistribuido(DogPlayerInterface):
         pass #???
     
     @property
+    def conected(self):
+        return self.__conected
+
+    @property
     def jogadores(self):
         if self.__jogo is not None:
             return self.__jogo.jogadores
