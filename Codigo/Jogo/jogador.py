@@ -41,7 +41,7 @@ class Jogador():
             self.colocar_na_mao(carta)
 
     def comprar_mao(self) -> None:
-        n_cards: int = Mesa.mesa.get_num_cartas()
+        n_cards: int = self.__mesa.get_num_cartas()
         while len(self.__mao) < n_cards:
             self.comprar_carta()
 

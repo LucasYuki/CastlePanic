@@ -296,11 +296,11 @@ class Mesa():
             self.__jogador_no_controle = self.__ordem_jogadores[atual.ordem]
 
     def descartar_todas(self, carta_tipo: CartaTipo) -> None:
-        for jogador in self.__jogadores:
+        for jogador in self.__jogadores.values():
             jogador.descartar_todas(carta_tipo)
 
     def todos_descartam_um(self) -> None:
-        for jogador in self.__jogadores:
+        for jogador in self.__jogadores.values():
             jogador.descartar_aleatoria()
 
     def bloquear_tokens(self) -> None:

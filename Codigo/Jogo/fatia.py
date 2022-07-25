@@ -14,6 +14,10 @@ class Fatia:
         self.__num: int = num
 
     @property
+    def num(self):
+        return self.__num
+
+    @property
     def aneis(self):
         return self.__aneis
 
