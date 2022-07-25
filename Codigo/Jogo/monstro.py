@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from PIL import Image
-from random import randrange
+import numpy as np
 from abc import ABC, abstractmethod
 
 from .enums import TokenTipo
@@ -26,7 +26,7 @@ class Monstro(Token):
         self.__ultimo_turno_imovel: int = -1
 
     def invocar(self, mesa: Mesa) -> None:
-        mesa.get_tabuleiro().colocar_peca(self, 0, randrange(0,6))
+        mesa.get_tabuleiro().colocar_peca(self, 0, np.random([0,1,2,3,4,5]))
 
     def danificar(self) -> bool:
         self.__vida -= 1

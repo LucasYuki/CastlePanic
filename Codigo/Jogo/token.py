@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from PIL import Image
-from random import randrange
+import numpy as np
 from abc import ABC, abstractmethod
 
 from .enums import TokenTipo, CartaTipo
@@ -63,7 +63,7 @@ class Pedra(Token):
         super().__init__(TokenTipo.PEDRA)
 
     def invocar(self, mesa: Mesa.Mesa):
-        fatia = mesa.get_tabuleiro().get_fatia(randrange(0,6))
+        fatia = mesa.get_tabuleiro().get_fatia(np.random([0,1,2,3,4,5]))
         mesa.get_tabuleiro().pedra(fatia)
     
     def load_image(self): # -> Image
