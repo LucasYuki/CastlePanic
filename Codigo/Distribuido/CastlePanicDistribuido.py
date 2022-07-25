@@ -133,7 +133,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
         move_info = {"posicao": posicao.get_info_dict(), 
                      "monstro_idx": posicao.get_peca_id(monstro)}
         
-        sucesso = self.__jogo.selecionar_monstro(carta, self.__local_player)
+        sucesso = self.__jogo.selecionar_monstro(monstro, posicao, self.__local_player)
         print("CastlePanicDistribuido selecionar_monstro", sucesso)
         if sucesso:
             self.__gui.update()
@@ -142,7 +142,7 @@ class CastlePanicDistribuido(DogPlayerInterface):
     
     def selecionar_posicao(self, posicao: Posicao):
         move_info = {"posicao": posicao.get_info_dict()}
-        sucesso = self.__jogo.selecionar_posicao(carta, self.__local_player)
+        sucesso = self.__jogo.selecionar_posicao(posicao, self.__local_player)
         print("CastlePanicDistribuido selecionar_posicao", sucesso)
         if sucesso:
             self.__gui.update()

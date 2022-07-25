@@ -32,12 +32,14 @@ class BoardView(Canvas):
         self.__peca_idx = {}
         self.__imgs = {}
         self.__rotation = {}
+        self.__position = {}
         for posicao, pecas in self.__pecas_dict.items():
             for peca in pecas:
                 self.__rotation[peca] = BoardView.get_rotation(posicao, peca)
                 self.__imgs[peca] = ImageTk.PhotoImage(peca.get_image())
                 self.__peca_idx[peca] = self.create_image(0, 0, image=self.__imgs[peca], 
                                                           anchor='nw')
+                self.__position[peca] = posicao
                 #self.tag_bind(self.__peca_idx[i], "<Enter>",
                 #              lambda e, idx=i: self.__on_hover(e, idx))
                 self.tag_bind(self.__peca_idx[peca], "<Button-1>",
@@ -88,8 +90,8 @@ class BoardView(Canvas):
                 self.coords(self.__peca_idx[fortificacao], (int(x), int(y)))
 
     def __on_click(self, event, peca: Peca):
-        print("aaa aaaaaaaaaaa")
-        print("Click on ", self.__peca_idx[peca])
+        if isinstance(peca, Monstro):
+            self.__layout.selecionar_monstro(peca, self.__position[peca])
 
     @property
     def aspect_ratio(self):
