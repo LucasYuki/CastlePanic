@@ -278,10 +278,8 @@ class Mesa():
         return False
 
     def jogar_carta(self, carta: Carta, jogador: Jogador) -> bool:
-        if not jogador is self.__jogador_no_controle:
-            return False
-        
         pertence = jogador.possui_carta(carta)
+        
         if pertence and self.__jogador_no_controle == jogador:
             carta.ativar(jogador)
             self.__fase = FaseTipo.JOGADA
